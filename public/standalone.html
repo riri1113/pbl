@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日南トゥクトゥク巡り（Nichinan TukTuk Navi）</title>
+  <meta name="description" content="高校生向けの日南トゥクトゥク観光＆SNSスタンプラリーアプリ。5スタンプ集めて1回乗車無料チケットをGET！" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 antialiased min-h-screen flex flex-col pb-24">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 text-white shadow-md">
+    <div class="bg-black/15 px-3 py-1 text-center text-xs font-medium tracking-wide flex items-center justify-center gap-1.5">
+      <span class="inline-block px-1.5 py-0.5 rounded bg-white/25 text-[10px] font-bold">高校生応援</span>
+      <span>🌴 日南の魅力をSNSで発信！5スタンプで1回乗車無料 🛺</span>
+    </div>
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-2xl bg-white text-orange-600 shadow-sm flex items-center justify-center text-2xl shrink-0 -rotate-3 border-2 border-orange-200">
+          🛺
+        </div>
+        <div>
+          <h1 class="font-black text-base sm:text-lg leading-tight">日南トゥクトゥク巡り</h1>
+          <p class="text-[11px] text-amber-100 font-medium">Nichinan TukTuk Navi</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="header-stamp-badge" onclick="switchTab('ticket')" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-bold text-xs bg-white/20 text-white hover:bg-white/30 transition-all">
+          <span>⭐</span> <span id="header-stamp-count">0 / 5</span>
+        </button>
+        <button onclick="resetData()" title="データリセット" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white text-xs">
+          ↺
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-2xl w-full mx-auto px-4 pt-4 space-y-6">
+
+    <!-- TAB 1: HOME (STAMPS) -->
+    <section id="tab-home" class="space-y-5">
+      <!-- Stamp Card -->
+      <div class="bg-white rounded-3xl p-5 shadow-sm border border-amber-100 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-extrabold text-slate-800 text-base sm:text-lg flex items-center gap-1.5">
+            <span class="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-black">🏅</span>
+            日南SNSスタンプカード
+          </h2>
+          <span id="stamp-badge-pill" class="text-xs font-bold px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 border border-orange-200">
+            0 / 5 達成
+          </span>
+        </div>
+        <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+          スポットでSNSにハッシュタグ投稿＆スクショを提出してスタンプを集めよう！5つ揃うと<strong class="text-orange-600">トゥクトゥク1回乗車無料券</strong>を獲得！
+        </p>
+
+        <!-- Progress Bar -->
+        <div class="space-y-1.5 mb-5">
+          <div class="flex justify-between text-xs font-bold">
+            <span id="progress-text" class="text-orange-600">あと 5 個で無料チケット獲得！🚗💨</span>
+            <span id="progress-percent" class="text-orange-500">0%</span>
+          </div>
+          <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
+            <div id="progress-bar-inner" class="h-full rounded-full bg-gradient-to-r from-orange-400 via-amber-400 to-emerald-400 transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- 5 Slots Grid -->
+        <div class="grid grid-cols-5 gap-2 sm:gap-3" id="stamp-slots-container">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Congratulation Ribbon -->
+        <div id="home-congrats-banner" class="hidden mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl animate-bounce">🎉</span>
+            <div>
+              <p class="text-xs font-black text-emerald-900">おめでとう！無料乗車チケット獲得！</p>
+              <p class="text-[11px] text-emerald-700">ドライバーに見せて乗車できます</p>
+            </div>
+          </div>
+          <button onclick="switchTab('ticket')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
+            チケットを見る →
+          </button>
+        </div>
+      </div>
+
+      <!-- Spots Header -->
+      <div class="flex items-center justify-between pt-1">
+        <h3 class="font-extrabold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+          <span class="w-2.5 h-6 rounded-full bg-orange-500"></span>
+          日南の観光スポット
+        </h3>
+        <span class="text-xs text-slate-500">全6スポット</span>
+      </div>
+
+      <!-- Spots List Container -->
+      <div id="spots-list" class="space-y-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- TAB 2: TICKET -->
+    <section id="tab-ticket" class="space-y-5 hidden">
+      <div class="text-center space-y-1">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-black bg-orange-100 text-orange-700 border border-orange-200">
+          高校生特典チケット
+        </span>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-800">乗車無料チケット</h2>
+        <p class="text-xs text-slate-500">5つのスタンプを集めると使える、トゥクトゥク1回無料チケットです</p>
+      </div>
+
+      <!-- Ticket Container (Locked / Unlocked / Used) -->
+      <div id="ticket-display-card">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- TAB 3: SPOT GUIDE -->
+    <section id="tab-guide" class="space-y-5 hidden">
+      <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-500 rounded-3xl p-5 sm:p-6 text-white shadow-md">
+        <h2 class="text-xl sm:text-2xl font-black mb-1">高校生のための日南映えスポット巡り 🛺</h2>
+        <p class="text-xs text-emerald-100 leading-relaxed">潮風をあびながらオープンエアのトゥクトゥクで日南海岸や城下町を爽快ドライブ！</p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-200 space-y-3">
+        <h3 class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+          <span class="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black">🛺</span>
+          トゥクトゥク乗車のキホン＆おすすめポイント
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
+            <span class="font-bold text-orange-800 block mb-1">🌊 海風オープンエア</span>
+            <p class="text-slate-600">窓がないので日南海岸のパノラマと潮風をダイレクトに体感できます！</p>
+          </div>
+          <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200">
+            <span class="font-bold text-emerald-800 block mb-1">📸 車窓からの撮影も◎</span>
+            <p class="text-slate-600">ヤシの木並木を走るトゥクトゥクの車窓動画はSNSでもバズり度満点！</p>
+          </div>
+          <div class="p-3 rounded-2xl bg-sky-50 border border-sky-200">
+            <span class="font-bold text-sky-800 block mb-1">🍱 食べ歩きも身軽に</span>
+            <p class="text-slate-600">飫肥城下町の小路や油津のカフェ巡りも小回りが利いてラクラク！</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="guide-spots-list" class="space-y-4">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg pb-safe">
+    <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-around">
+      <button onclick="switchTab('home')" id="nav-btn-home" class="flex flex-col items-center justify-center w-24 text-orange-600 font-extrabold">
+        <span class="text-xl">🏅</span>
+        <span class="text-[11px] mt-0.5">スタンプ</span>
+      </button>
+      <button onclick="switchTab('ticket')" id="nav-btn-ticket" class="flex flex-col items-center justify-center w-24 text-slate-400 relative">
+        <span class="text-xl">🎟️</span>
+        <span class="text-[11px] mt-0.5">チケット</span>
+        <span id="nav-ticket-badge" class="hidden absolute top-1 right-5 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
+      </button>
+      <button onclick="switchTab('guide')" id="nav-btn-guide" class="flex flex-col items-center justify-center w-24 text-slate-400">
+        <span class="text-xl">🧭</span>
+        <span class="text-[11px] mt-0.5">ガイド</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Stamp Submission Modal -->
+  <div id="stamp-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs hidden">
+    <div class="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-amber-200 flex flex-col max-h-[90vh]">
+      <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 px-5 py-4 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🛺</span>
+          <div>
+            <h3 class="font-black text-base sm:text-lg" id="modal-spot-title">スタンプGETミッション</h3>
+            <p class="text-xs text-amber-100" id="modal-spot-subtitle"></p>
+          </div>
+        </div>
+        <button onclick="closeStampModal()" class="w-8 h-8 rounded-full bg-black/20 text-white flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-4">
+        <!-- 3 Steps -->
+        <div class="space-y-3">
+          <!-- Step 1 -->
+          <div class="p-3.5 rounded-2xl bg-orange-50 border border-orange-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-orange-800 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center text-[11px] font-black">1</span>
+                ハッシュタグをコピー
+              </span>
+              <button onclick="copyModalHashtags()" id="modal-copy-btn" class="px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 transition-all">
+                タグをコピー
+              </button>
+            </div>
+            <div id="modal-hashtags-container" class="flex flex-wrap gap-1.5 pt-1"></div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
+            <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-slate-700 text-white flex items-center justify-center text-[11px] font-black">2</span>
+              Instagram / X に投稿！
+            </span>
+            <p class="text-xs text-slate-600">撮影した写真にハッシュタグをつけてSNSに投稿してね！</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px] font-black">3</span>
+                投稿スクリーンショットをアップロード
+              </span>
+              <button onclick="useDemoScreenshot()" class="text-[10px] text-orange-600 font-bold underline">
+                テスト用スクショを適用
+              </button>
+            </div>
+            <input type="file" id="modal-file-input" accept="image/*" class="w-full text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-orange-500 file:text-white hover:file:bg-orange-600" onchange="previewSelectedImage(event)" />
+            <div id="modal-preview-container" class="hidden rounded-xl overflow-hidden border border-slate-300">
+              <img id="modal-preview-img" src="" alt="preview" class="w-full h-40 object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-end gap-2.5">
+        <button onclick="closeStampModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600">閉じる</button>
+        <button onclick="submitStamp()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs sm:text-sm font-bold shadow-md">
+          送信してスタンプGET！
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Driver Verification Modal (Anti-Fraud animated screen) -->
+  <div id="driver-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-400 flex flex-col relative">
+      <div class="bg-amber-400 py-1 px-4 text-[10px] font-black tracking-widest text-slate-900 flex items-center justify-between">
+        <span>🛡️ OFFICIAL TUKTUK PASS</span>
+        <span id="driver-ticket-code" class="font-mono">NTT-2026-XXXX</span>
+      </div>
+
+      <div class="bg-gradient-to-r from-orange-600 via-amber-500 to-emerald-600 p-4 text-white relative">
+        <button onclick="closeDriverModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">✕</button>
+        <div class="flex items-center gap-2">
+          <span class="text-3xl animate-bounce">🛺</span>
+          <div>
+            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded font-bold">高校生限定 特典</span>
+            <h3 class="text-base sm:text-lg font-black">ドライバー提示画面</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-5 space-y-4 bg-gradient-to-b from-amber-50/40 to-white">
+        <!-- Live Real-Time Clock -->
+        <div class="bg-slate-900 text-white rounded-2xl p-4 text-center border border-slate-700">
+          <p class="text-[11px] text-amber-300 font-bold mb-1">⏱️ リアルタイム認証中（スクリーンショット防止）</p>
+          <div id="driver-clock" class="font-mono text-3xl sm:text-4xl font-black tracking-wider text-emerald-400">
+            00:00:00.0
+          </div>
+          <p class="text-[10px] text-emerald-300 font-bold mt-1">● 有効な乗車チケットです</p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-white border-2 border-orange-200 text-center space-y-1">
+          <h4 class="text-lg font-black text-slate-800">日南トゥクトゥク 1回乗車無料券</h4>
+          <p class="text-xs text-slate-500">日南市内 トゥクトゥク全線（1名様有効）</p>
+        </div>
+
+        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs">
+          <strong>乗車方法：</strong>ドライバーにこの画面をお見せください。確認後に下のボタンを押してください。
+        </div>
+
+        <button onclick="markTicketUsed()" class="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-lg">
+          乗車確認：使用完了にする
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration Modal -->
+  <div id="celebration-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs hidden">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl border-2 border-amber-300 space-y-4">
+      <div class="text-5xl animate-bounce">🎉</div>
+      <div class="space-y-1">
+        <span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-black">CONGRATULATIONS!</span>
+        <h3 class="text-xl font-black text-slate-900">スタンプ5つ達成！<br>無料チケット獲得！</h3>
+        <p class="text-xs text-slate-600">日南の魅力を発信してくれてありがとう！「日南トゥクトゥク 1回無料乗車券」が発行されました！</p>
+      </div>
+      <button onclick="closeCelebrationAndGoTicket()" class="w-full py-3 rounded-2xl bg-orange-500 text-white font-black text-sm shadow-md">
+        チケットを確認する →
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Spots Data
+    const SPOTS = [
+      {
+        id: 'udo-jingu',
+        name: '鵜戸神宮（うどじんぐう）',
+        subtitle: '日南海岸の断崖洞窟に佇む神秘の神社',
+        category: 'パワースポット・絶景',
+        description: '太平洋の荒波が打ち寄せる海食洞の中に本殿が佇む洞窟神社。「運玉投げ」は勝負運・縁結び祈願で高校生にも大人気！',
+        tukTukTip: '潮風を感じながら日南海岸ロードを爽快ドライブ！',
+        photoTip: '朱色の鮮やかな鳥居越しの青い海！運玉を投げる瞬間を連写で狙おう。',
+        hashtags: ['#日南トゥクトゥク', '#鵜戸神宮', '#運玉チャレンジ', '#日南観光'],
+        imageUrl: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80',
+        order: 1
+      },
+      {
+        id: 'sunmesse',
+        name: 'サンメッセ日南',
+        subtitle: '青い海を背に並ぶ7体の完全復刻モアイ像',
+        category: 'アート・絶景スポット',
+        description: 'イースター島の長老会から世界で唯一公式復刻を許可されたモアイ像。虹色のベンチや太陽の丘など映え写真の聖地！',
+        tukTukTip: '急な坂道もトゥクトゥクで一気に爽快クライム！',
+        photoTip: '7体のモアイ像の前で友達と同じポーズで並んでジャンプ！',
+        hashtags: ['#日南トゥクトゥク', '#サンメッセ日南', '#モアイ像', '#映え旅'],
+        imageUrl: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=800&q=80',
+        order: 2
+      },
+      {
+        id: 'obi-castle',
+        name: '飫肥城下町（おびじょうかまち）',
+        subtitle: '「九州の小京都」風情ある武家屋敷と食べ歩き',
+        category: '歴史・レトロ・グルメ',
+        description: '名物の「飫肥天」やプリンのように甘い「厚焼卵」の食べ歩きが大好評。鯉が泳ぐ清らかな水路沿いを散策！',
+        tukTukTip: '小回りの利くトゥクトゥクで狭い城下町の小路もスイスイ。',
+        photoTip: '大手門前の石垣や、食べ歩きグルメを手前に合わせたショット！',
+        hashtags: ['#日南トゥクトゥク', '#飫肥城下町', '#飫肥天食べ歩き', '#小京都日南'],
+        imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
+        order: 3
+      },
+      {
+        id: 'aburatsu',
+        name: '油津商店街＆赤レンガ館',
+        subtitle: 'レトロモダンな赤レンガとカープ愛あふれる街',
+        category: 'カルチャー・カフェ',
+        description: '大正時代の油津赤レンガ館やお洒落なカフェが点在。広島東洋カープの春季キャンプ地としても有名！',
+        tukTukTip: '港町の風とノスタルジックな商店街を巡るのんびりルート。',
+        photoTip: '赤レンガ館の重厚な壁をバックにしたストリートスナップ！',
+        hashtags: ['#日南トゥクトゥク', '#油津商店街', '#油津赤レンガ館', '#あぶらつ'],
+        imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        order: 4
+      },
+      {
+        id: 'nango',
+        name: '道の駅なんごう＆栄松ビーチ',
+        subtitle: '南国情緒満点のパノラマと完熟マンゴースイーツ',
+        category: '南国スイーツ・パノラマ',
+        description: '日南海岸国定公園の南端に位置し、コバルトブルーの日向灘を一望。濃厚な完熟マンゴーソフトクリームが絶品！',
+        tukTukTip: '絶景海岸ロードをフルオープンで爽快クルーズ！',
+        photoTip: '海原を見渡すデッキでマンゴーソフトクリームを掲げて撮影！',
+        hashtags: ['#日南トゥクトゥク', '#道の駅なんごう', '#完熟マンゴーソフト', '#日南ドライブ'],
+        imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
+        order: 5
+      },
+      {
+        id: 'futo-beach',
+        name: '富土（ふと）海岸＆トトロの森',
+        subtitle: '透明度抜群のビーチと話題のフォトスポット',
+        category: '海・自然・写真映え',
+        description: '白い砂浜と澄んだエメラルドグリーンの海水が美しい人気ビーチ。夕暮れ時のシルエット写真がエモい！',
+        tukTukTip: '海岸線沿いのフェニックス並木をトゥクトゥクで疾走！',
+        photoTip: '水平線に沈む太陽とキラキラ光る水面をバックにしたシルエット。',
+        hashtags: ['#日南トゥクトゥク', '#富土海岸', '#日南ビーチ', '#エモい放課後'],
+        imageUrl: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80',
+        order: 6
+      }
+    ];
+
+    // State Variables
+    let userStamps = [];
+    let userTicket = {
+      isUnlocked: false,
+      isUsed: false,
+      usedAt: null,
+      code: 'NTT-2026-X8K9'
+    };
+    let activeModalSpot = null;
+    let currentPreviewUrl = '';
+
+    // Init App
+    function init() {
+      const savedStamps = localStorage.getItem('nichinan_tuktuk_stamps_v1');
+      if (savedStamps) userStamps = JSON.parse(savedStamps);
+
+      const savedTicket = localStorage.getItem('nichinan_tuktuk_ticket_v1');
+      if (savedTicket) userTicket = JSON.parse(savedTicket);
+
+      renderApp();
+      startDriverClock();
+    }
+
+    function saveState() {
+      localStorage.setItem('nichinan_tuktuk_stamps_v1', JSON.stringify(userStamps));
+      localStorage.setItem('nichinan_tuktuk_ticket_v1', JSON.stringify(userTicket));
+    }
+
+    function renderApp() {
+      renderHeader();
+      renderStampCard();
+      renderSpotsList();
+      renderTicket();
+      renderGuideList();
+    }
+
+    function renderHeader() {
+      document.getElementById('header-stamp-count').innerText = `${userStamps.length} / 5`;
+      const isComplete = userStamps.length >= 5 || userTicket.isUnlocked;
+      const navBadge = document.getElementById('nav-ticket-badge');
+      if (isComplete && !userTicket.isUsed) {
+        navBadge.classList.remove('hidden');
+      } else {
+        navBadge.classList.add('hidden');
+      }
+    }
+
+    function renderStampCard() {
+      const count = userStamps.length;
+      document.getElementById('stamp-badge-pill').innerText = `${count} / 5 達成`;
+      const remaining = Math.max(0, 5 - count);
+      const percent = Math.min(100, Math.round((count / 5) * 100));
+
+      const progressText = document.getElementById('progress-text');
+      if (count >= 5) {
+        progressText.innerHTML = '<span class="text-emerald-600 font-black">5スタンプコンプリート達成！🎉</span>';
+        document.getElementById('home-congrats-banner').classList.remove('hidden');
+      } else {
+        progressText.innerText = `あと ${remaining} 個で無料チケット獲得！🚗💨`;
+        document.getElementById('home-congrats-banner').classList.add('hidden');
+      }
+      document.getElementById('progress-percent').innerText = `${percent}%`;
+      document.getElementById('progress-bar-inner').style.width = `${percent}%`;
+
+      // Render 5 slots
+      const container = document.getElementById('stamp-slots-container');
+      container.innerHTML = '';
+
+      for (let i = 0; i < 5; i++) {
+        const stamp = userStamps[i];
+        const spot = stamp ? SPOTS.find(s => s.id === stamp.spotId) : null;
+        const isFilled = !!stamp;
+
+        const slot = document.createElement('div');
+        slot.className = 'flex flex-col items-center gap-1';
+        slot.innerHTML = `
+          <div class="w-13 h-13 sm:w-16 sm:h-16 rounded-2xl flex flex-col items-center justify-center transition-all ${
+            isFilled
+              ? 'bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-md ring-2 ring-orange-300'
+              : 'border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400'
+          }">
+            ${isFilled 
+              ? '<span class="text-xl sm:text-2xl">🛺</span><span class="text-[8px] font-black text-amber-100">GET!</span>' 
+              : `<span class="text-xs font-bold">${i + 1}</span><span class="text-[8px]">未獲得</span>`}
+          </div>
+          <span class="text-[10px] text-center font-medium text-slate-600 line-clamp-1 max-w-[62px]">
+            ${spot ? spot.name.split('（')[0] : `SPOT ${i + 1}`}
+          </span>
+        `;
+        container.appendChild(slot);
+      }
+    }
+
+    function renderSpotsList() {
+      const container = document.getElementById('spots-list');
+      container.innerHTML = '';
+
+      SPOTS.forEach(spot => {
+        const isStamped = userStamps.some(s => s.spotId === spot.id);
+        const card = document.createElement('div');
+        card.className = `bg-white rounded-3xl overflow-hidden border shadow-sm transition-all ${isStamped ? 'border-emerald-200' : 'border-slate-200'}`;
+        card.innerHTML = `
+          <div class="relative h-44 sm:h-48 w-full">
+            <img src="${spot.imageUrl}" alt="${spot.name}" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+            <div class="absolute top-3 left-3 flex gap-1.5">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/90 text-slate-800">📍 ${spot.category}</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-500 text-white">No.${spot.order}</span>
+            </div>
+            ${isStamped ? '<div class="absolute top-3 right-3 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-black">✓ 獲得済み</div>' : ''}
+            <div class="absolute bottom-3 left-3 right-3 text-white">
+              <h4 class="font-black text-base sm:text-lg leading-snug">${spot.name}</h4>
+              <p class="text-xs text-amber-200 line-clamp-1">${spot.subtitle}</p>
+            </div>
+          </div>
+          <div class="p-4 sm:p-5 space-y-3">
+            <p class="text-xs text-slate-600 leading-relaxed">${spot.description}</p>
+            <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-slate-700">
+              <strong class="text-orange-700 font-bold">🛺 トゥクトゥク爽快ポイント：</strong>${spot.tukTukTip}
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+              ${isStamped ? `
+                <span class="text-xs font-bold text-emerald-600">✓ スタンプ獲得完了</span>
+                <button onclick="openStampModal('${spot.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600">詳細を見る</button>
+              ` : `
+                <button onclick="openStampModal('${spot.id}')" class="w-full py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm">
+                  <span>📸 SNS投稿画像を提出してスタンプGET！</span>
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderTicket() {
+      const container = document.getElementById('ticket-display-card');
+      const isUnlocked = userTicket.isUnlocked || userStamps.length >= 5;
+      const isUsed = userTicket.isUsed;
+
+      if (!isUnlocked && !isUsed) {
+        container.innerHTML = `
+          <div class="bg-white rounded-3xl p-6 border-2 border-dashed border-slate-300 text-center space-y-4">
+            <div class="w-16 h-16 rounded-3xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-3xl">🔒</div>
+            <h3 class="text-lg font-black text-slate-700">チケットはまだロックされています</h3>
+            <p class="text-xs text-orange-600 font-bold">あと ${Math.max(0, 5 - userStamps.length)} 個のスタンプで解除されます！</p>
+            <button onclick="switchTab('home')" class="w-full py-3 rounded-2xl bg-orange-500 text-white text-xs sm:text-sm font-bold shadow-md">
+              スタンプを集めに行く →
+            </button>
+          </div>
+        `;
+      } else if (isUnlocked && !isUsed) {
+        container.innerHTML = `
+          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-xl relative overflow-hidden border-2 border-amber-300">
+            <div class="flex items-center justify-between border-b border-white/25 pb-3 mb-3">
+              <span class="text-xs font-bold">🛺 日南トゥクトゥク観光推進協議会</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-black">利用可能</span>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black mb-2">日南トゥクトゥク 1回乗車無料券</h3>
+            <p class="text-xs text-amber-100 mb-4">SNSスタンプラリー5スポット達成特典！乗車時にドライバーに提示してください。</p>
+            <button onclick="openDriverModal()" class="w-full py-3.5 rounded-2xl bg-white text-orange-600 font-black text-sm shadow-lg">
+              👁️ 乗車時にドライバーに見せる →
+            </button>
+          </div>
+        `;
+      } else if (isUsed) {
+        container.innerHTML = `
+          <div class="bg-white rounded-3xl p-6 border-2 border-slate-200 text-center space-y-4">
+            <div class="w-20 h-20 rounded-full border-4 border-slate-400 text-slate-400 mx-auto flex flex-col items-center justify-center -rotate-12">
+              <span class="text-xs font-black">USED</span>
+              <span class="text-[9px]">使用済み</span>
+            </div>
+            <h3 class="text-lg font-black text-slate-700">チケットは使用済みです</h3>
+            <p class="text-xs text-slate-500">ご乗車いただきありがとうございました！</p>
+            <button onclick="resetData()" class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold">
+              ↺ もう一度最初から巡る（リセット）
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function renderGuideList() {
+      const container = document.getElementById('guide-spots-list');
+      container.innerHTML = '';
+
+      SPOTS.forEach(spot => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-3xl overflow-hidden border border-slate-200 p-4 sm:p-5 space-y-3';
+        card.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded-md bg-orange-500 text-white text-[10px] font-black">Spot ${spot.order}</span>
+            <h4 class="font-black text-base sm:text-lg">${spot.name}</h4>
+          </div>
+          <p class="text-xs text-slate-600">${spot.description}</p>
+          <div class="p-3 rounded-2xl bg-purple-50 border border-purple-200 text-purple-900 text-xs">
+            <strong>📸 おすすめ撮影スポット：</strong>${spot.photoTip}
+          </div>
+          <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-slate-700 text-xs">
+            <strong>🛺 トゥクトゥク移動ポイント：</strong>${spot.tukTukTip}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.getElementById('tab-home').classList.add('hidden');
+      document.getElementById('tab-ticket').classList.add('hidden');
+      document.getElementById('tab-guide').classList.add('hidden');
+
+      document.getElementById('nav-btn-home').className = 'flex flex-col items-center justify-center w-24 text-slate-400';
+      document.getElementById('nav-btn-ticket').className = 'flex flex-col items-center justify-center w-24 text-slate-400 relative';
+      document.getElementById('nav-btn-guide').className = 'flex flex-col items-center justify-center w-24 text-slate-400';
+
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      document.getElementById(`nav-btn-${tabId}`).className = 'flex flex-col items-center justify-center w-24 text-orange-600 font-extrabold relative';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Stamp Modal Operations
+    function openStampModal(spotId) {
+      const spot = SPOTS.find(s => s.id === spotId);
+      if (!spot) return;
+      activeModalSpot = spot;
+
+      document.getElementById('modal-spot-title').innerText = spot.name;
+      document.getElementById('modal-spot-subtitle').innerText = spot.subtitle;
+
+      const tagContainer = document.getElementById('modal-hashtags-container');
+      tagContainer.innerHTML = '';
+      spot.hashtags.forEach(tag => {
+        const span = document.createElement('span');
+        span.className = 'text-[11px] font-medium px-2 py-0.5 rounded-md bg-white text-orange-700 border border-orange-200';
+        span.innerText = tag;
+        tagContainer.appendChild(span);
+      });
+
+      currentPreviewUrl = '';
+      document.getElementById('modal-file-input').value = '';
+      document.getElementById('modal-preview-container').classList.add('hidden');
+      document.getElementById('stamp-modal').classList.remove('hidden');
+    }
+
+    function closeStampModal() {
+      document.getElementById('stamp-modal').classList.add('hidden');
+    }
+
+    function copyModalHashtags() {
+      if (!activeModalSpot) return;
+      navigator.clipboard.writeText(activeModalSpot.hashtags.join(' '));
+      const btn = document.getElementById('modal-copy-btn');
+      btn.innerText = 'コピー完了！';
+      btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white';
+      setTimeout(() => {
+        btn.innerText = 'タグをコピー';
+        btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white hover:bg-orange-600';
+      }, 2000);
+    }
+
+    function useDemoScreenshot() {
+      if (!activeModalSpot) return;
+      currentPreviewUrl = activeModalSpot.imageUrl;
+      const previewImg = document.getElementById('modal-preview-img');
+      previewImg.src = currentPreviewUrl;
+      document.getElementById('modal-preview-container').classList.remove('hidden');
+    }
+
+    function previewSelectedImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          currentPreviewUrl = e.target.result;
+          document.getElementById('modal-preview-img').src = currentPreviewUrl;
+          document.getElementById('modal-preview-container').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function submitStamp() {
+      if (!activeModalSpot) return;
+      if (!currentPreviewUrl) {
+        alert('投稿スクリーンショットを選択または「テスト用スクショを適用」を押してください');
+        return;
+      }
+
+      if (!userStamps.some(s => s.spotId === activeModalSpot.id)) {
+        userStamps.push({
+          spotId: activeModalSpot.id,
+          date: new Date().toISOString(),
+          photo: currentPreviewUrl
+        });
+      }
+
+      closeStampModal();
+
+      if (userStamps.length === 5 && !userTicket.isUnlocked) {
+        userTicket.isUnlocked = true;
+        saveState();
+        renderApp();
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        document.getElementById('celebration-modal').classList.remove('hidden');
+      } else {
+        saveState();
+        renderApp();
+        confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
+      }
+    }
+
+    function closeCelebrationAndGoTicket() {
+      document.getElementById('celebration-modal').classList.add('hidden');
+      switchTab('ticket');
+    }
+
+    // Driver Modal Operations
+    function openDriverModal() {
+      document.getElementById('driver-ticket-code').innerText = userTicket.code || 'NTT-2026-X8K9';
+      document.getElementById('driver-modal').classList.remove('hidden');
+    }
+
+    function closeDriverModal() {
+      document.getElementById('driver-modal').classList.add('hidden');
+    }
+
+    function markTicketUsed() {
+      if (confirm('ドライバーの前で提示しましたか？使用済みに変更します。')) {
+        userTicket.isUsed = true;
+        userTicket.usedAt = new Date().toISOString();
+        saveState();
+        renderApp();
+        closeDriverModal();
+        alert('チケットを使用済みにしました。日南トゥクトゥクのご利用ありがとうございました！');
+      }
+    }
+
+    function startDriverClock() {
+      setInterval(() => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const ms = Math.floor(now.getMilliseconds() / 100);
+        const clockEl = document.getElementById('driver-clock');
+        if (clockEl) clockEl.innerText = `${timeStr}.${ms}`;
+      }, 100);
+    }
+
+    function resetData() {
+      if (confirm('スタンプとチケット利用状況をリセットしますか？')) {
+        userStamps = [];
+        userTicket = { isUnlocked: false, isUsed: false, usedAt: null, code: 'NTT-2026-X8K9' };
+        saveState();
+        renderApp();
+      }
+    }
+
+    // Start on DOM ready
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

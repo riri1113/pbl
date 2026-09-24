@@ -1,0 +1,6 @@
+{
+  "name": "日南トゥクトゥク巡り（Nichinan TukTuk Navi）",
+  "description": "高校生向けの日南トゥクトゥク観光＆SNSスタンプラリーアプリ。観光スポットを巡ってSNS投稿し、スタンプを5つ集めて1回乗車無料チケットをゲット！",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
