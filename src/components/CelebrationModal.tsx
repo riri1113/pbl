@@ -1,5 +1,6 @@
 import React from 'react';
-import { Sparkles, Ticket, CheckCircle, ArrowRight } from 'lucide-react';
+import { ShoppingBag, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import { sounds } from '../utils/audio';
 
 interface CelebrationModalProps {
@@ -11,36 +12,42 @@ export const CelebrationModal: React.FC<CelebrationModalProps> = ({
   onGoToTicket,
   onClose,
 }) => {
+  const { t } = useLanguage();
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
       <div
         id="celebration-modal-container"
-        className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-300 text-center relative p-6 space-y-4 animate-in zoom-in-95 duration-300"
+        className="bg-white w-full max-w-sm rounded-[36px] overflow-hidden shadow-2xl border-4 border-pink-150 text-center relative p-6 sm:p-7 space-y-4 animate-in zoom-in-95 duration-300"
       >
         {/* Confetti / Badge graphics */}
-        <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-amber-400 via-orange-400 to-emerald-400 text-white mx-auto flex items-center justify-center text-4xl shadow-lg shadow-orange-500/30 animate-bounce">
+        <div className="w-22 h-22 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-amber-300 text-white mx-auto flex items-center justify-center text-5xl shadow-xl shadow-pink-300/50 animate-bounce">
           🎉
         </div>
 
         <div className="space-y-1.5">
-          <span className="inline-block px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-black tracking-wider uppercase">
-            MISSION COMPLETE!
+          <span className="inline-block px-3.5 py-1 rounded-full bg-pink-100 text-rose-500 text-xs font-black tracking-wider uppercase border border-pink-200">
+            {t('celebBadge')}
           </span>
-          <h3 className="text-xl font-black text-slate-900 leading-tight">
-            スタンプ5つ達成！<br />無料乗車チケット獲得！
+          <h3 className="text-xl sm:text-2xl font-black text-slate-800 leading-tight whitespace-pre-line">
+            {t('celebTitle')}
           </h3>
-          <p className="text-xs text-slate-600 leading-relaxed pt-1">
-            日南の素敵な観光スポットを巡って魅力を発信してくれてありがとう！「日南トゥクトゥク 1回無料乗車券」が自動発行されました。
+          <p className="text-xs text-slate-500 leading-relaxed font-medium pt-1">
+            {t('celebDesc')}
           </p>
         </div>
 
-        {/* Mini ticket card preview */}
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white p-3.5 rounded-2xl shadow-sm space-y-1 text-left">
-          <div className="flex items-center justify-between text-[11px] font-bold opacity-90">
-            <span>🛺 日南トゥクトゥク</span>
-            <span className="bg-white/25 px-2 py-0.5 rounded-full text-[10px]">有効</span>
+        {/* Mini voucher card preview */}
+        <div className="bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 text-white p-4 rounded-2xl shadow-md shadow-pink-200 space-y-1 text-left relative overflow-hidden">
+          <div className="flex items-center justify-between text-[11px] font-black opacity-95">
+            <span className="flex items-center gap-1">
+              <span>🛍️</span>
+              <span>NICHINAN 1,000 YEN VOUCHER</span>
+            </span>
+            <span className="bg-white/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[10px]">{t('activeAvailable')}</span>
           </div>
-          <p className="text-sm font-black">1回乗車無料チケット（全区間）</p>
+          <p className="text-sm font-black drop-shadow-xs">{t('celebVoucherTitle')}</p>
+          <p className="text-[10px] text-pink-100 font-medium">{t('celebVoucherSub')}</p>
         </div>
 
         {/* Action Buttons */}
@@ -52,10 +59,10 @@ export const CelebrationModal: React.FC<CelebrationModalProps> = ({
               sounds.playClick();
               onGoToTicket();
             }}
-            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 hover:from-rose-500 hover:to-pink-500 text-white font-black text-sm shadow-md shadow-pink-200 active:scale-95 transition-all flex items-center justify-center gap-2"
           >
-            <Ticket className="w-4 h-4" />
-            <span>獲得したチケットを確認する</span>
+            <ShoppingBag className="w-4 h-4 text-white" />
+            <span>{t('celebViewTicket')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
 
@@ -64,7 +71,7 @@ export const CelebrationModal: React.FC<CelebrationModalProps> = ({
             onClick={onClose}
             className="w-full py-2 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors"
           >
-            閉じる
+            {t('close')}
           </button>
         </div>
       </div>

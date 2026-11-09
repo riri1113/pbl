@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Ticket, Lock, Sparkles, CheckCircle2, QrCode, AlertCircle, ArrowRight, Eye, RefreshCw } from 'lucide-react';
+import { Lock, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Eye, RefreshCw, ShoppingBag, Store, Tag } from 'lucide-react';
 import { TicketData } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { DriverModal } from './DriverModal';
 
 interface TicketViewProps {
@@ -20,13 +21,16 @@ export const TicketView: React.FC<TicketViewProps> = ({
   onNavigateHome,
   onReset,
 }) => {
+  const { lang, t } = useLanguage();
   const [showDriverModal, setShowDriverModal] = useState(false);
   const remaining = Math.max(0, totalRequired - stampCount);
   const isUnlocked = ticket.isUnlocked || stampCount >= totalRequired;
   const isUsed = ticket.isUsed;
 
+  const localeCode = lang === 'en' ? 'en-US' : lang === 'zh' ? 'zh-TW' : lang === 'ko' ? 'ko-KR' : 'ja-JP';
+
   const formattedUsedDate = ticket.usedAt
-    ? new Date(ticket.usedAt).toLocaleString('ja-JP', {
+    ? new Date(ticket.usedAt).toLocaleString(localeCode, {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
@@ -39,46 +43,50 @@ export const TicketView: React.FC<TicketViewProps> = ({
     <div className="space-y-5 animate-in fade-in duration-300">
       {/* Page Title */}
       <div className="text-center space-y-1">
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-orange-100 text-orange-700 border border-orange-200">
-          高校生特典チケット
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-pink-100 text-rose-500 border border-pink-200">
+          {t('voucherSuperTitle')}
         </span>
         <h2 className="text-xl sm:text-2xl font-black text-slate-800">
-          乗車無料チケット
+          {t('voucherMainTitle')}
         </h2>
-        <p className="text-xs text-slate-500">
-          5つのスタンプを集めると使える、トゥクトゥク1回無料チケットです
+        <p className="text-xs text-slate-400 font-medium">
+          {t('voucherSubtitle')}
         </p>
       </div>
 
       {/* STATE 1: LOCKED (stampCount < 5) */}
       {!isUnlocked && !isUsed && (
-        <div className="bg-white rounded-3xl p-6 border-2 border-dashed border-slate-300 text-center space-y-4 shadow-sm relative overflow-hidden">
-          <div className="w-16 h-16 rounded-3xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-2xl shadow-inner">
-            <Lock className="w-8 h-8 text-slate-400" />
+        <div className="bg-white/95 rounded-[32px] p-6 border-2 border-dashed border-pink-200 text-center space-y-4 shadow-sm shadow-pink-100 relative overflow-hidden">
+          <div className="w-16 h-16 rounded-3xl bg-pink-50 text-rose-400 mx-auto flex items-center justify-center text-2xl shadow-inner border border-pink-100">
+            <Lock className="w-7 h-7 text-pink-300" />
           </div>
 
           <div className="space-y-1">
             <h3 className="text-lg font-black text-slate-700">
-              チケットはまだロックされています
+              {t('lockedTitle')}
             </h3>
-            <p className="text-xs text-orange-600 font-bold">
-              あと <span className="text-base font-black text-orange-600">{remaining}</span> 個のスタンプで解除されます！
+            <p className="text-xs text-rose-400 font-bold">
+              {t('lockedRemaining', { remaining })}
             </p>
           </div>
 
-          {/* Ticket preview dummy */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left opacity-75">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-2">
-              <span className="text-xs font-bold text-slate-400">日南トゥクトゥク</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-500">
+          {/* Voucher preview dummy */}
+          <div className="p-4 rounded-2xl bg-[#FFF8F6] border border-pink-100 text-left opacity-80 relative overflow-hidden">
+            <div className="flex items-center justify-between border-b border-pink-100 pb-2 mb-2">
+              <span className="text-xs font-black text-rose-400 flex items-center gap-1">
+                <ShoppingBag className="w-3.5 h-3.5" />
+                NICHINAN 1,000 YEN VOUCHER
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-100 text-rose-400">
                 LOCKED
               </span>
             </div>
-            <p className="text-sm font-black text-slate-600">
-              日南市内 1回乗車無料券（通常 500円〜1,000円）
-            </p>
-            <p className="text-[11px] text-slate-400 mt-1">
-              鵜戸神宮、サンメッセ日南、飫肥城下町など人気エリア間の移動で使えます
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-black text-slate-400 font-mono">¥1,000</span>
+              <span className="text-xs font-black text-slate-600">{t('lockedPreviewName')}</span>
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1.5 font-medium leading-relaxed">
+              {t('lockedPreviewDesc')}
             </p>
           </div>
 
@@ -86,9 +94,9 @@ export const TicketView: React.FC<TicketViewProps> = ({
             id="ticket-go-stamp-btn"
             type="button"
             onClick={onNavigateHome}
-            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs sm:text-sm font-bold shadow-md flex items-center justify-center gap-2 active:scale-95 transition-all"
+            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 hover:from-rose-500 hover:to-pink-500 text-white text-xs sm:text-sm font-black shadow-md shadow-pink-200 flex items-center justify-center gap-2 active:scale-95 transition-all"
           >
-            <span>スタンプを集めに行く</span>
+            <span>{t('goToStampBtn')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -97,78 +105,92 @@ export const TicketView: React.FC<TicketViewProps> = ({
       {/* STATE 2: UNLOCKED & ACTIVE (Ready to use) */}
       {isUnlocked && !isUsed && (
         <div className="space-y-4">
-          {/* Active Ticket Card with Cutouts & Radiant Style */}
-          <div className="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-xl shadow-orange-500/20 relative overflow-hidden border-2 border-amber-300">
+          {/* Active Voucher Card with Cutouts & Radiant Gift Style */}
+          <div className="bg-gradient-to-br from-rose-400 via-pink-400 to-amber-300 rounded-[32px] p-5 sm:p-6 text-white shadow-xl shadow-pink-300/40 relative overflow-hidden border-2 border-white/60">
             {/* Ticket side cutouts */}
-            <div className="absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-8 rounded-full bg-amber-50/40 border border-orange-300 shadow-inner" />
-            <div className="absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-8 rounded-full bg-amber-50/40 border border-orange-300 shadow-inner" />
+            <div className="absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-8 rounded-full bg-[#FFF8F5] border border-pink-200 shadow-inner" />
+            <div className="absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-8 rounded-full bg-[#FFF8F5] border border-pink-200 shadow-inner" />
 
             {/* Glowing background circles */}
             <div className="absolute -top-12 -right-12 w-36 h-36 bg-white/20 rounded-full blur-xl pointer-events-none" />
 
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/25 pb-3 mb-3">
+            <div className="flex items-center justify-between border-b border-white/30 pb-3 mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🛺</span>
+                <span className="text-2xl">🛍️</span>
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-amber-100 font-black block">
-                    HIGH SCHOOL SPECIAL PASS
+                  <span className="text-[10px] tracking-widest text-pink-100 font-black block">
+                    {t('activeVoucherTag')}
                   </span>
-                  <span className="text-xs font-bold">日南トゥクトゥク観光推進協議会</span>
+                  <span className="text-xs font-black text-white">{t('activeVoucherHeader')}</span>
                 </div>
               </div>
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-black shadow-xs flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-200" />
-                利用可能
+              <span className="px-3 py-1 rounded-full bg-white text-rose-500 text-xs font-black shadow-xs flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                {t('activeAvailable')}
               </span>
             </div>
 
-            {/* Body */}
-            <div className="space-y-2 my-4">
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight drop-shadow-sm">
-                日南トゥクトゥク 1回乗車無料券
-              </h3>
-              <p className="text-xs text-amber-100 leading-relaxed">
-                おめでとうございます！SNSスタンプラリー5スポット達成により付与された乗車チケットです。
+            {/* Prominent Value Banner */}
+            <div className="bg-white/95 rounded-2xl p-4 text-slate-800 shadow-sm border border-white/60 text-center my-3 relative overflow-hidden">
+              <div className="absolute -top-6 -right-6 w-20 h-20 bg-pink-100/60 rounded-full blur-md" />
+              <div className="flex items-center justify-center gap-2">
+                <Tag className="w-4 h-4 text-rose-400" />
+                <span className="text-xs font-black text-rose-500 tracking-wider">{t('activeSpecialCoupon')}</span>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 my-1">
+                <span className="text-base font-black text-rose-400">¥</span>
+                <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-slate-800">
+                  {t('activeVoucherValue')}
+                </span>
+                <span className="text-xs font-black px-2 py-0.5 rounded-full bg-rose-50 text-rose-500 border border-pink-200">
+                  {t('activeVoucherUnit')}
+                </span>
+              </div>
+              <p className="text-xs font-black text-slate-700">
+                {t('voucherMainTitle')}
+              </p>
+              <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                {t('activeVoucherStores')}
               </p>
             </div>
 
-            {/* Ticket Details Bar */}
-            <div className="bg-black/20 backdrop-blur-xs rounded-2xl p-3 grid grid-cols-2 gap-2 text-xs border border-white/10 mb-4">
+            {/* Voucher Details Bar */}
+            <div className="bg-black/15 backdrop-blur-md rounded-2xl p-3.5 grid grid-cols-2 gap-2 text-xs border border-white/20 mb-4">
               <div>
-                <span className="text-[10px] text-amber-200 block">チケットID</span>
-                <span className="font-mono font-bold tracking-wider">{ticket.ticketCode}</span>
+                <span className="text-[10px] text-pink-200 block font-bold">{t('couponNumberLabel')}</span>
+                <span className="font-mono font-black tracking-wider text-sm">{ticket.ticketCode}</span>
               </div>
               <div>
-                <span className="text-[10px] text-amber-200 block">有効区間</span>
-                <span className="font-bold">日南市内 トゥクトゥク全線</span>
+                <span className="text-[10px] text-pink-200 block font-bold">{t('termsLabel')}</span>
+                <span className="font-black text-sm">{t('termsValue')}</span>
               </div>
             </div>
 
-            {/* Action Button: Present to Driver */}
+            {/* Action Button: Present to Store Staff at Cashier */}
             <button
               id="present-to-driver-btn"
               type="button"
               onClick={() => setShowDriverModal(true)}
-              className="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-amber-50 text-orange-600 font-black text-sm sm:text-base shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 px-4 rounded-2xl bg-white hover:bg-pink-50 text-rose-500 font-black text-sm sm:text-base shadow-lg shadow-pink-900/10 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              <Eye className="w-5 h-5 text-orange-500" />
-              <span>乗車時にドライバーに見せる</span>
-              <ArrowRight className="w-4 h-4 text-orange-500" />
+              <Eye className="w-5 h-5 text-rose-400" />
+              <span>{t('presentToCashierBtn')}</span>
+              <ArrowRight className="w-4 h-4 text-rose-400" />
             </button>
           </div>
 
           {/* Usage Instructions Card */}
-          <div className="bg-white rounded-2xl p-4 border border-slate-200 text-xs text-slate-600 space-y-2">
-            <h4 className="font-bold text-slate-800 flex items-center gap-1.5">
-              <AlertCircle className="w-4 h-4 text-orange-500" />
-              チケットの使い方・注意点
+          <div className="bg-white/95 rounded-2xl p-4 border border-pink-100 text-xs text-slate-600 space-y-2 shadow-2xs">
+            <h4 className="font-black text-slate-700 flex items-center gap-1.5">
+              <AlertCircle className="w-4 h-4 text-rose-400" />
+              {t('howToUseTitle')}
             </h4>
-            <ul className="list-disc list-inside space-y-1 text-slate-500 leading-relaxed">
-              <li>トゥクトゥク乗車時に「ドライバーに見せる」ボタンを押してください。</li>
-              <li>不正利用防止のため、動く認証画面が表示されます。</li>
-              <li>ドライバーの確認後に「使用完了」ボタンを押してください。</li>
-              <li>乗車1回分（1名様）が無料になります。</li>
+            <ul className="list-disc list-inside space-y-1 text-slate-500 leading-relaxed font-medium">
+              <li>{t('howToUse1')}</li>
+              <li>{t('howToUse2')}</li>
+              <li>{t('howToUse3')}</li>
+              <li>{t('howToUse4')}</li>
             </ul>
           </div>
         </div>
@@ -176,34 +198,34 @@ export const TicketView: React.FC<TicketViewProps> = ({
 
       {/* STATE 3: USED (使用済み) */}
       {isUsed && (
-        <div className="bg-white rounded-3xl p-6 border-2 border-slate-200 text-center space-y-4 shadow-sm relative overflow-hidden">
+        <div className="bg-white/95 rounded-[32px] p-6 border-2 border-pink-100 text-center space-y-4 shadow-sm relative overflow-hidden">
           {/* Stamped Watermark */}
-          <div className="w-20 h-20 rounded-full border-4 border-slate-400 text-slate-400 mx-auto flex flex-col items-center justify-center transform -rotate-12 select-none">
-            <CheckCircle2 className="w-6 h-6 mb-0.5 text-slate-400" />
-            <span className="text-[11px] font-black tracking-wider uppercase">USED</span>
-            <span className="text-[8px] font-bold">使用済み</span>
+          <div className="w-20 h-20 rounded-full border-4 border-rose-300 text-rose-400 mx-auto flex flex-col items-center justify-center transform -rotate-12 select-none shadow-sm bg-pink-50/50">
+            <CheckCircle2 className="w-6 h-6 mb-0.5 text-rose-400" />
+            <span className="text-[11px] font-black tracking-wider uppercase">{t('usedWatermark')}</span>
           </div>
 
           <div className="space-y-1">
             <h3 className="text-lg font-black text-slate-700">
-              チケットは使用済みです
+              {t('usedTitle')}
             </h3>
-            <p className="text-xs text-slate-500">
-              日南トゥクトゥクをご利用いただきありがとうございました！
+            <p className="text-xs text-slate-400 font-medium">
+              {t('usedDesc')}
             </p>
             {formattedUsedDate && (
-              <p className="text-xs text-slate-400 font-mono mt-1">
-                使用日時: {formattedUsedDate}
+              <p className="text-xs text-rose-400 font-mono mt-1 font-bold">
+                {t('usedAtLabel', { date: formattedUsedDate })}
               </p>
             )}
           </div>
 
-          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-left text-xs text-slate-700 leading-relaxed">
-            <p className="font-bold text-orange-800 mb-1">
-              🌴 日南の旅の思い出をシェアしてくれてありがとう！
+          <div className="p-4 rounded-2xl bg-pink-50/60 border border-pink-100 text-left text-xs text-slate-600 leading-relaxed font-medium">
+            <p className="font-black text-rose-500 mb-1 flex items-center gap-1.5">
+              <Store className="w-4 h-4 text-rose-400" />
+              {t('usedThankYouTitle')}
             </p>
-            <p className="text-slate-600">
-              引き続き「スポットガイド」から日南の他の絶景やグルメをチェックして、最高の高校生活の思い出を作ってくださいね。
+            <p className="text-slate-500">
+              {t('usedThankYouDesc')}
             </p>
           </div>
 
@@ -212,16 +234,16 @@ export const TicketView: React.FC<TicketViewProps> = ({
               id="ticket-reset-btn"
               type="button"
               onClick={onReset}
-              className="w-full py-2.5 px-4 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold flex items-center justify-center gap-1.5"
+              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 hover:from-rose-500 hover:to-pink-500 text-white text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-md shadow-pink-200 active:scale-95 transition-all"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>もう一度最初から巡る（データをリセット）</span>
+              <RefreshCw className="w-4 h-4 animate-spin-once" />
+              <span>{t('resetTourBtn')}</span>
             </button>
           )}
         </div>
       )}
 
-      {/* Modal: Present to Driver */}
+      {/* Modal: Present to Store Staff at Cashier */}
       {showDriverModal && (
         <DriverModal
           ticket={ticket}

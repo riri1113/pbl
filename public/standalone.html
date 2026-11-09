@@ -3,47 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>日南トゥクトゥク巡り（Nichinan TukTuk Navi）</title>
-  <meta name="description" content="高校生向けの日南トゥクトゥク観光＆SNSスタンプラリーアプリ。5スタンプ集めて1回乗車無料チケットをGET！" />
+  <title>日南エモ旅ナビ（SNSスタンプラリーで日南のお店で使える商品券1,000円分GET）</title>
+  <meta name="description" content="高校生向けの日南エモ旅SNSスタンプラリーアプリ。5スタンプ集めて日南のお店で使える商品券1,000円分をGET！" />
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
-      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-family: 'Zen Maru Gothic', sans-serif;
+    }
+    .font-cute {
+      font-family: 'Gaegu', cursive, sans-serif;
     }
   </style>
 </head>
-<body class="bg-amber-50/40 text-slate-800 antialiased min-h-screen flex flex-col pb-24">
+<body class="bg-[#FFF8F5] text-slate-800 antialiased min-h-screen flex flex-col pb-24">
 
   <!-- Header -->
-  <header class="sticky top-0 z-40 bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 text-white shadow-md">
-    <div class="bg-black/15 px-3 py-1 text-center text-xs font-medium tracking-wide flex items-center justify-center gap-1.5">
-      <span class="inline-block px-1.5 py-0.5 rounded bg-white/25 text-[10px] font-bold">高校生応援</span>
-      <span>🌴 日南の魅力をSNSで発信！5スタンプで1回乗車無料 🛺</span>
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-pink-100 shadow-xs">
+    <div class="bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 px-3 py-1 text-center text-xs font-bold text-white tracking-wide flex items-center justify-center gap-1.5 shadow-2xs">
+      <span class="inline-block px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-black backdrop-blur-xs">高校生応援 ♡</span>
+      <span class="font-bold">˗ˏˋ 日南の映えスポットを巡って日南のお店で使える商品券1,000円分をGET！ ˎˊ˗</span>
     </div>
-    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+    <div class="max-w-2xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
       <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-2xl bg-white text-orange-600 shadow-sm flex items-center justify-center text-2xl shrink-0 -rotate-3 border-2 border-orange-200">
-          🛺
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-400 to-amber-300 text-white shadow-sm flex items-center justify-center text-xl shrink-0 -rotate-3 border-2 border-white">
+          🌴
         </div>
         <div>
-          <h1 class="font-black text-base sm:text-lg leading-tight">日南トゥクトゥク巡り</h1>
-          <p class="text-[11px] text-amber-100 font-medium">Nichinan TukTuk Navi</p>
+          <h1 class="font-black text-base sm:text-lg leading-tight tracking-tight text-slate-800">
+            日南エモ旅 <span class="text-rose-400 text-xs font-cute font-bold">♥</span>
+          </h1>
+          <p class="text-[10px] text-rose-400 font-bold tracking-wider">Nichinan Emo Trip SNS Stamp Rally</p>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <button id="header-stamp-badge" onclick="switchTab('ticket')" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-bold text-xs bg-white/20 text-white hover:bg-white/30 transition-all">
-          <span>⭐</span> <span id="header-stamp-count">0 / 5</span>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <select id="header-lang-select" onchange="changeLanguage(this.value)" class="text-xs bg-pink-50 border border-pink-200 text-rose-500 font-black rounded-full px-2 py-1 outline-none cursor-pointer">
+          <option value="ja">🇯🇵 日本語</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="zh">🇹🇼 繁體中文</option>
+          <option value="ko">🇰🇷 한국어</option>
+        </select>
+        <button id="header-stamp-badge" onclick="switchTab('ticket')" class="flex items-center gap-1 px-3 py-1.5 rounded-full font-black text-xs bg-pink-50 text-rose-500 border border-pink-200 hover:bg-pink-100 transition-all">
+          <span>♡</span> <span id="header-stamp-count">0 / 5</span>
         </button>
-        <button onclick="resetData()" title="データリセット" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white text-xs">
+        <button onclick="resetData()" title="データリセット" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-pink-50 text-slate-400 hover:text-rose-500 flex items-center justify-center text-xs transition-colors">
           ↺
         </button>
       </div>
@@ -56,62 +65,109 @@
     <!-- TAB 1: HOME (STAMPS) -->
     <section id="tab-home" class="space-y-5">
       <!-- Stamp Card -->
-      <div class="bg-white rounded-3xl p-5 shadow-sm border border-amber-100 relative overflow-hidden">
+      <div class="bg-white/95 rounded-[32px] p-5 shadow-sm border-2 border-pink-100/90 relative overflow-hidden backdrop-blur-xs">
         <div class="flex items-center justify-between mb-2">
-          <h2 class="font-extrabold text-slate-800 text-base sm:text-lg flex items-center gap-1.5">
-            <span class="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-black">🏅</span>
-            日南SNSスタンプカード
-          </h2>
-          <span id="stamp-badge-pill" class="text-xs font-bold px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 border border-orange-200">
-            0 / 5 達成
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-2xl bg-gradient-to-tr from-pink-400 to-rose-400 text-white flex items-center justify-center text-sm font-black shadow-xs shadow-pink-200">
+              🏷️
+            </span>
+            <h2 class="font-black text-slate-800 text-base sm:text-lg flex items-center gap-1.5">
+              <span>日南エモ旅スタンプ帳</span>
+              <span class="text-xs font-normal text-rose-400 tracking-wider">♡ STAMP RALLY</span>
+            </h2>
+          </div>
+          <span id="stamp-badge-pill" class="text-xs font-black px-3 py-1 rounded-full bg-pink-50 text-rose-500 border border-pink-200/80 shadow-2xs">
+            0 / 5 個完了 💕
           </span>
         </div>
-        <p class="text-xs text-slate-500 mb-4 leading-relaxed">
-          スポットでSNSにハッシュタグ投稿＆スクショを提出してスタンプを集めよう！5つ揃うと<strong class="text-orange-600">トゥクトゥク1回乗車無料券</strong>を獲得！
+        <p class="text-xs text-slate-500 mb-4 leading-relaxed font-medium">
+          気になるスポットに行ってSNS（インスタ/X）でシェア📸 スクショを貼ってスタンプを集めよう！5つ揃うと
+          <strong class="text-rose-500 font-bold bg-pink-50 px-1 py-0.5 rounded mx-0.5"> 日南のお店で使える商品券1,000円分 </strong>
+          がもらえるよ🛍️✨
         </p>
 
         <!-- Progress Bar -->
         <div class="space-y-1.5 mb-5">
           <div class="flex justify-between text-xs font-bold">
-            <span id="progress-text" class="text-orange-600">あと 5 個で無料チケット獲得！🚗💨</span>
-            <span id="progress-percent" class="text-orange-500">0%</span>
+            <span id="progress-text" class="text-rose-500 font-bold">あと 5 個で1,000円商品券解放！GO〜🛍️💨</span>
+            <span id="progress-percent" class="text-rose-400 font-black">0%</span>
           </div>
-          <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
-            <div id="progress-bar-inner" class="h-full rounded-full bg-gradient-to-r from-orange-400 via-amber-400 to-emerald-400 transition-all duration-500" style="width: 0%"></div>
+          <div class="h-3.5 w-full bg-pink-50 rounded-full overflow-hidden p-0.5 border border-pink-200/60 shadow-inner">
+            <div id="progress-bar-inner" class="h-full rounded-full bg-gradient-to-r from-pink-400 via-rose-400 to-amber-300 transition-all duration-500 ease-out shadow-xs" style="width: 0%"></div>
           </div>
         </div>
 
-        <!-- 5 Slots Grid -->
-        <div class="grid grid-cols-5 gap-2 sm:gap-3" id="stamp-slots-container">
+        <!-- 5 Stamp Slots -->
+        <div id="stamp-slots-container" class="grid grid-cols-5 gap-2 sm:gap-3 my-2">
           <!-- Populated by JS -->
         </div>
 
-        <!-- Congratulation Ribbon -->
-        <div id="home-congrats-banner" class="hidden mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 flex items-center justify-between gap-3">
+        <!-- 5-stamp Congrats Banner -->
+        <div id="home-congrats-banner" class="hidden mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-pink-50 via-rose-50 to-amber-50 border-2 border-pink-200 flex items-center justify-between gap-3 shadow-sm">
           <div class="flex items-center gap-2.5">
-            <span class="text-2xl animate-bounce">🎉</span>
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-400 to-rose-400 text-white flex items-center justify-center text-xl shrink-0 shadow-sm shadow-pink-300 animate-bounce">
+              🛍️
+            </div>
             <div>
-              <p class="text-xs font-black text-emerald-900">おめでとう！無料乗車チケット獲得！</p>
-              <p class="text-[11px] text-emerald-700">ドライバーに見せて乗車できます</p>
+              <p class="text-xs font-black text-rose-600">5スタンプ達成！日南のお店で使える商品券1,000円分GET！</p>
+              <p class="text-[11px] text-slate-500 font-medium">お会計時にレジの店員さんに見せて使えます（カフェ・グルメ・お土産店など）</p>
             </div>
           </div>
-          <button onclick="switchTab('ticket')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
-            チケットを見る →
+          <button onclick="switchTab('ticket')" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white text-xs font-black flex items-center gap-1.5 shadow-md shadow-pink-200 active:scale-95 transition-all shrink-0">
+            <span>商品券を使う →</span>
+          </button>
+        </div>
+
+        <!-- Quick Demo helper -->
+        <div class="mt-3 pt-3 border-t border-pink-100/80 flex items-center justify-between text-xs text-slate-400">
+          <span class="flex items-center gap-1 font-medium text-slate-500">
+            ✨ 下のスポットから好きな5つを選んでスタンプGETしてね♡
+          </span>
+          <button onclick="quickDemoAddStamp()" class="text-[10px] text-rose-400 hover:text-rose-500 font-bold underline cursor-pointer">
+            + デモ用1スタンプ追加
           </button>
         </div>
       </div>
 
-      <!-- Spots Header -->
-      <div class="flex items-center justify-between pt-1">
-        <h3 class="font-extrabold text-slate-800 text-base sm:text-lg flex items-center gap-2">
-          <span class="w-2.5 h-6 rounded-full bg-orange-500"></span>
-          日南の観光スポット
-        </h3>
-        <span class="text-xs text-slate-500">全6スポット</span>
+      <!-- Location & Sorting Control Bar -->
+      <div class="p-3 sm:p-3.5 rounded-2xl bg-white border border-pink-100 shadow-2xs space-y-2">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 text-xs font-black text-slate-700">
+            <span class="text-rose-500">📍</span>
+            <span id="standalone-location-status" class="text-rose-600 font-bold">現在地から近い順に表示中</span>
+          </div>
+          <div class="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
+            <div class="flex items-center p-0.5 rounded-xl bg-pink-50/80 border border-pink-100 text-[11px] font-black">
+              <button type="button" onclick="setSortMode('distance')" id="btn-sort-dist" class="px-2.5 py-1 rounded-lg bg-rose-500 text-white shadow-2xs">
+                📍 近い順
+              </button>
+              <button type="button" onclick="setSortMode('recommend')" id="btn-sort-recom" class="px-2.5 py-1 rounded-lg text-slate-600">
+                ✨ おすすめ順
+              </button>
+            </div>
+            <button type="button" onclick="requestStandaloneLocation()" class="px-2 py-1 rounded-lg text-[10px] font-black bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200">
+              現在地を更新
+            </button>
+            <button type="button" onclick="simulateNichinanStandalone()" class="px-2 py-1 rounded-lg text-[10px] font-black bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200">
+              日南駅で試す
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Spots List Container -->
-      <div id="spots-list" class="space-y-4">
+      <!-- Spots List Header -->
+      <div class="space-y-3 pt-1">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-6 rounded-full bg-gradient-to-b from-rose-400 to-pink-400"></span>
+            <h3 class="font-black text-slate-800 text-base sm:text-lg">日南のスポット（全13箇所）</h3>
+          </div>
+          <span id="spots-count-badge" class="text-xs text-rose-400 font-black">獲得：0 / 13</span>
+        </div>
+      </div>
+
+      <!-- Spot Cards Grid -->
+      <div id="spots-list-container" class="space-y-4">
         <!-- Populated by JS -->
       </div>
     </section>
@@ -119,11 +175,11 @@
     <!-- TAB 2: TICKET -->
     <section id="tab-ticket" class="space-y-5 hidden">
       <div class="text-center space-y-1">
-        <span class="inline-block px-3 py-1 rounded-full text-xs font-black bg-orange-100 text-orange-700 border border-orange-200">
-          高校生特典チケット
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-black bg-pink-100 text-rose-500 border border-pink-200">
+          ˗ˏˋ SPECIAL SHOPPING VOUCHER ˎˊ˗
         </span>
-        <h2 class="text-xl sm:text-2xl font-black text-slate-800">乗車無料チケット</h2>
-        <p class="text-xs text-slate-500">5つのスタンプを集めると使える、トゥクトゥク1回無料チケットです</p>
+        <h2 class="text-xl sm:text-2xl font-black text-slate-800">日南のお店で使える商品券 1,000円分 🛍️✨</h2>
+        <p class="text-xs text-slate-400 font-medium">スタンプを5つ集めると日南のカフェやショップ・グルメ店で使える特別商品券♡</p>
       </div>
 
       <!-- Ticket Container (Locked / Unlocked / Used) -->
@@ -134,28 +190,41 @@
 
     <!-- TAB 3: SPOT GUIDE -->
     <section id="tab-guide" class="space-y-5 hidden">
-      <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-500 rounded-3xl p-5 sm:p-6 text-white shadow-md">
-        <h2 class="text-xl sm:text-2xl font-black mb-1">高校生のための日南映えスポット巡り 🛺</h2>
-        <p class="text-xs text-emerald-100 leading-relaxed">潮風をあびながらオープンエアのトゥクトゥクで日南海岸や城下町を爽快ドライブ！</p>
+      <div class="bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 rounded-[32px] p-5 sm:p-6 text-white shadow-md shadow-pink-200/50 relative overflow-hidden">
+        <div class="relative z-10 space-y-2">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/25 backdrop-blur-md text-xs font-black border border-white/30">
+            🧭 ˗ˏˋ TRAVEL GUIDE ˎˊ˗
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black tracking-tight drop-shadow-xs">
+            高校生のための日南エモ旅 映えスポット巡り 🌴✨
+          </h2>
+          <p class="text-xs text-pink-100 font-medium leading-relaxed max-w-lg">
+            青い太平洋の絶景、小京都飫肥の城下町、新鮮なカツオやカフェスイーツまで！日南の良い所＆おすすめPointをぎゅっと凝縮したよ♡
+          </p>
+        </div>
+        <div class="absolute -right-4 -bottom-6 text-7xl opacity-20 select-none">🌴</div>
       </div>
 
-      <div class="bg-white rounded-3xl p-4 sm:p-5 border border-amber-200 space-y-3">
-        <h3 class="font-extrabold text-slate-800 text-sm sm:text-base flex items-center gap-2">
-          <span class="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-black">🛺</span>
-          トゥクトゥク乗車のキホン＆おすすめポイント
+      <!-- Tips Card -->
+      <div class="bg-white/95 rounded-[28px] p-4 sm:p-5 border-2 border-pink-100 shadow-sm shadow-pink-50 space-y-3">
+        <h3 class="font-black text-slate-800 text-sm sm:text-base flex items-center gap-2">
+          <span class="w-8 h-8 rounded-2xl bg-pink-100 text-rose-500 flex items-center justify-center text-base font-black">
+            🌴
+          </span>
+          日南エモ旅の魅力＆おすすめPoint♡
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-          <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
-            <span class="font-bold text-orange-800 block mb-1">🌊 海風オープンエア</span>
-            <p class="text-slate-600">窓がないので日南海岸のパノラマと潮風をダイレクトに体感できます！</p>
+          <div class="p-3.5 rounded-2xl bg-[#FFF6F3] border border-pink-100">
+            <span class="font-black text-rose-500 block mb-1">🌊 青い太平洋と南国パノラマ</span>
+            <p class="text-slate-600 leading-relaxed font-medium">サンメッセのモアイ像や鵜戸神宮、富土海岸など、どこまでも澄んだ青い海と緑のコントラストが最高！</p>
           </div>
-          <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200">
-            <span class="font-bold text-emerald-800 block mb-1">📸 車窓からの撮影も◎</span>
-            <p class="text-slate-600">ヤシの木並木を走るトゥクトゥクの車窓動画はSNSでもバズり度満点！</p>
+          <div class="p-3.5 rounded-2xl bg-[#F4F9F4] border border-emerald-100">
+            <span class="font-black text-emerald-600 block mb-1">🏯 小京都・飫肥＆レトロ散歩</span>
+            <p class="text-slate-600 leading-relaxed font-medium">江戸情緒残る武家屋敷や鯉が泳ぐ清流、大正ロマンの赤レンガ館など、ノスタルジックでエモい街並み！</p>
           </div>
-          <div class="p-3 rounded-2xl bg-sky-50 border border-sky-200">
-            <span class="font-bold text-sky-800 block mb-1">🍱 食べ歩きも身軽に</span>
-            <p class="text-slate-600">飫肥城下町の小路や油津のカフェ巡りも小回りが利いてラクラク！</p>
+          <div class="p-3.5 rounded-2xl bg-[#F0F7FF] border border-sky-100">
+            <span class="font-black text-sky-600 block mb-1">🐟 名物一本釣りカツオ＆スイーツ</span>
+            <p class="text-slate-600 leading-relaxed font-medium">七輪で炙る一本釣りカツオや揚げたて飫肥天、完熟マンゴーソフトやとろけるプリンなど絶品グルメ三昧！</p>
           </div>
         </div>
       </div>
@@ -168,148 +237,173 @@
   </main>
 
   <!-- Bottom Navigation -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg pb-safe">
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-pink-100 shadow-xl pb-safe">
     <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-around">
-      <button onclick="switchTab('home')" id="nav-btn-home" class="flex flex-col items-center justify-center w-24 text-orange-600 font-extrabold">
-        <span class="text-xl">🏅</span>
-        <span class="text-[11px] mt-0.5">スタンプ</span>
+      <button onclick="switchTab('home')" id="nav-btn-home" class="flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-rose-500 font-black bg-pink-50/80 shadow-2xs">
+        <span class="text-lg">🏷️</span>
+        <span class="text-[11px] mt-0.5 leading-none tracking-tight font-black">スタンプ</span>
       </button>
-      <button onclick="switchTab('ticket')" id="nav-btn-ticket" class="flex flex-col items-center justify-center w-24 text-slate-400 relative">
-        <span class="text-xl">🎟️</span>
-        <span class="text-[11px] mt-0.5">チケット</span>
-        <span id="nav-ticket-badge" class="hidden absolute top-1 right-5 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
+      <button onclick="switchTab('ticket')" id="nav-btn-ticket" class="flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-slate-400 font-bold relative">
+        <span class="text-lg">🛍️</span>
+        <span class="text-[11px] mt-0.5 leading-none tracking-tight font-black">商品券</span>
+        <span id="nav-ticket-badge" class="hidden absolute top-2 right-6 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping"></span>
       </button>
-      <button onclick="switchTab('guide')" id="nav-btn-guide" class="flex flex-col items-center justify-center w-24 text-slate-400">
-        <span class="text-xl">🧭</span>
-        <span class="text-[11px] mt-0.5">ガイド</span>
+      <button onclick="switchTab('guide')" id="nav-btn-guide" class="flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-slate-400 font-bold">
+        <span class="text-lg">🧭</span>
+        <span class="text-[11px] mt-0.5 leading-none tracking-tight font-black">ガイド</span>
       </button>
     </div>
   </nav>
 
   <!-- Stamp Submission Modal -->
   <div id="stamp-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs hidden">
-    <div class="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-amber-200 flex flex-col max-h-[90vh]">
-      <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500 px-5 py-4 text-white flex items-center justify-between">
+    <div class="bg-white w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-pink-200 flex flex-col max-h-[90vh]">
+      <div class="bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 px-5 py-4 text-white flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span class="text-2xl">🛺</span>
+          <span class="w-10 h-10 rounded-2xl bg-white/25 backdrop-blur-md flex items-center justify-center text-xl shadow-2xs border border-white/30" id="modal-spot-icon">⭐</span>
           <div>
-            <h3 class="font-black text-base sm:text-lg" id="modal-spot-title">スタンプGETミッション</h3>
-            <p class="text-xs text-amber-100" id="modal-spot-subtitle"></p>
+            <h3 class="font-black text-base sm:text-lg leading-tight tracking-tight" id="modal-spot-title">スタンプGETミッション ✨</h3>
+            <p class="text-xs text-pink-100 font-bold" id="modal-spot-subtitle"></p>
           </div>
         </div>
-        <button onclick="closeStampModal()" class="w-8 h-8 rounded-full bg-black/20 text-white flex items-center justify-center">✕</button>
+        <button onclick="closeStampModal()" class="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">✕</button>
       </div>
 
       <div class="p-5 overflow-y-auto space-y-4">
         <!-- 3 Steps -->
         <div class="space-y-3">
           <!-- Step 1 -->
-          <div class="p-3.5 rounded-2xl bg-orange-50 border border-orange-200 space-y-2">
+          <div class="p-4 rounded-2xl bg-[#FFF9F6] border border-pink-100 space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-orange-800 flex items-center gap-1.5">
-                <span class="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center text-[11px] font-black">1</span>
+              <span class="text-xs font-black text-rose-500 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-rose-400 text-white flex items-center justify-center text-[11px] font-black">1</span>
                 ハッシュタグをコピー
               </span>
-              <button onclick="copyModalHashtags()" id="modal-copy-btn" class="px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 transition-all">
-                タグをコピー
+              <button onclick="copyModalHashtags()" id="modal-copy-btn" class="px-3 py-1 rounded-full text-xs font-black bg-rose-400 text-white hover:bg-rose-500 transition-all">
+                全タグをコピー
               </button>
             </div>
             <div id="modal-hashtags-container" class="flex flex-wrap gap-1.5 pt-1"></div>
           </div>
 
           <!-- Step 2 -->
-          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-            <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+          <div class="p-4 rounded-2xl bg-white border border-pink-100 space-y-1 shadow-2xs">
+            <span class="text-xs font-black text-slate-700 flex items-center gap-1.5">
               <span class="w-5 h-5 rounded-full bg-slate-700 text-white flex items-center justify-center text-[11px] font-black">2</span>
-              Instagram / X に投稿！
+              Instagram / X に写真を投稿！
             </span>
-            <p class="text-xs text-slate-600">撮影した写真にハッシュタグをつけてSNSに投稿してね！</p>
+            <p class="text-xs text-slate-500 leading-relaxed font-medium">撮影したエモい写真にハッシュタグ（#日南エモ旅 など）をつけてフィードやストーリーズ等にシェアしてね♡</p>
           </div>
 
           <!-- Step 3 -->
-          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div class="p-4 rounded-2xl bg-white border border-pink-100 space-y-2.5 shadow-2xs">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px] font-black">3</span>
-                投稿スクリーンショットをアップロード
+              <span class="text-xs font-black text-slate-700 flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-rose-400 text-white flex items-center justify-center text-[11px] font-black">3</span>
+                投稿スクリーンショットを提出
               </span>
-              <button onclick="useDemoScreenshot()" class="text-[10px] text-orange-600 font-bold underline">
+              <button onclick="useDemoScreenshot()" class="text-[10px] text-rose-500 hover:text-rose-600 font-black underline">
                 テスト用スクショを適用
               </button>
             </div>
-            <input type="file" id="modal-file-input" accept="image/*" class="w-full text-xs file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-orange-500 file:text-white hover:file:bg-orange-600" onchange="previewSelectedImage(event)" />
-            <div id="modal-preview-container" class="hidden rounded-xl overflow-hidden border border-slate-300">
-              <img id="modal-preview-img" src="" alt="preview" class="w-full h-40 object-cover" />
+
+            <input type="file" id="modal-file-input" accept="image/*" class="hidden" onchange="previewSelectedImage(event)" />
+
+            <div id="modal-preview-container" class="hidden relative rounded-2xl overflow-hidden border-2 border-pink-300">
+              <img id="modal-preview-img" src="" class="w-full h-44 object-cover" />
+              <div class="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-white/90 text-rose-500 text-[10px] font-black">画像選択完了♡</div>
+            </div>
+
+            <div onclick="document.getElementById('modal-file-input').click()" class="border-2 border-dashed border-pink-200 hover:border-pink-300 rounded-2xl p-5 text-center bg-[#FFFDFC] cursor-pointer">
+              <p class="text-xs font-black text-slate-700">ここをタップしてスクリーンショットを選択♡</p>
+              <p class="text-[10px] text-slate-400 font-medium">SNS投稿画面のスクショ画像（PNG / JPG）</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-end gap-2.5">
-        <button onclick="closeStampModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600">閉じる</button>
-        <button onclick="submitStamp()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs sm:text-sm font-bold shadow-md">
-          送信してスタンプGET！
+      <div class="p-4 border-t border-pink-100 bg-[#FFFDFC] flex justify-end gap-2">
+        <button onclick="closeStampModal()" class="px-4 py-2 rounded-full text-xs font-bold text-slate-400">閉じる</button>
+        <button id="modal-submit-btn" onclick="submitStamp()" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs font-black shadow-md shadow-pink-200 active:scale-95 flex items-center gap-1.5">
+          <span id="modal-submit-icon">✨</span>
+          <span id="modal-submit-text">送信してスタンプGET♡</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Driver Verification Modal (Anti-Fraud animated screen) -->
-  <div id="driver-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
-    <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-400 flex flex-col relative">
-      <div class="bg-amber-400 py-1 px-4 text-[10px] font-black tracking-widest text-slate-900 flex items-center justify-between">
-        <span>🛡️ OFFICIAL TUKTUK PASS</span>
-        <span id="driver-ticket-code" class="font-mono">NTT-2026-XXXX</span>
+  <!-- Verification Modal (Staff / Conductor) -->
+  <div id="driver-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs hidden">
+    <div class="bg-white w-full max-w-md rounded-[36px] overflow-hidden shadow-2xl border-4 border-pink-200 flex flex-col relative">
+      <div class="bg-gradient-to-r from-rose-300 via-pink-300 to-amber-200 py-1.5 px-4 text-[10px] font-black tracking-widest text-slate-800 flex items-center justify-between uppercase">
+        <span class="animate-pulse">🛡️ NICHINAN SHOPPING VOUCHER VERIFICATION</span>
+        <span id="driver-ticket-code" class="font-mono text-rose-700">NIC-1000-2026-X8K9</span>
       </div>
 
-      <div class="bg-gradient-to-r from-orange-600 via-amber-500 to-emerald-600 p-4 text-white relative">
-        <button onclick="closeDriverModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">✕</button>
-        <div class="flex items-center gap-2">
-          <span class="text-3xl animate-bounce">🛺</span>
+      <div class="bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 p-4 text-white relative">
+        <button onclick="closeDriverModal()" class="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">✕</button>
+        <div class="flex items-center gap-2.5">
+          <div class="w-11 h-11 rounded-2xl bg-white text-rose-500 flex items-center justify-center text-2xl shadow-md border-2 border-pink-100">
+            🛍️
+          </div>
           <div>
-            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded font-bold">高校生限定 特典</span>
-            <h3 class="text-base sm:text-lg font-black">ドライバー提示画面</h3>
+            <span class="px-2 py-0.5 rounded-full bg-white/25 text-[10px] font-black uppercase tracking-wider">高校生限定 特典</span>
+            <h3 class="text-base sm:text-lg font-black leading-tight">お会計・レジ 提示画面 ♡</h3>
           </div>
         </div>
       </div>
 
-      <div class="p-5 space-y-4 bg-gradient-to-b from-amber-50/40 to-white">
+      <div class="p-5 space-y-4 bg-gradient-to-b from-[#FFF8F5] to-white">
         <!-- Live Real-Time Clock -->
-        <div class="bg-slate-900 text-white rounded-2xl p-4 text-center border border-slate-700">
-          <p class="text-[11px] text-amber-300 font-bold mb-1">⏱️ リアルタイム認証中（スクリーンショット防止）</p>
-          <div id="driver-clock" class="font-mono text-3xl sm:text-4xl font-black tracking-wider text-emerald-400">
+        <div class="bg-slate-900 text-white rounded-[24px] p-4 text-center shadow-inner border border-slate-800">
+          <div class="text-xs text-pink-300 font-black mb-1">⏱️ リアルタイム認証中（スクリーンショット防止）</div>
+          <div id="driver-clock" class="font-mono text-3xl sm:text-4xl font-black tracking-wider text-pink-300 drop-shadow-sm">
             00:00:00.0
           </div>
-          <p class="text-[10px] text-emerald-300 font-bold mt-1">● 有効な乗車チケットです</p>
+          <div class="mt-2 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-950/80 border border-pink-400/50 text-[11px] text-pink-200 font-black">
+            <span class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
+            <span>有効な商品券です ♡</span>
+          </div>
         </div>
 
-        <div class="p-4 rounded-2xl bg-white border-2 border-orange-200 text-center space-y-1">
-          <h4 class="text-lg font-black text-slate-800">日南トゥクトゥク 1回乗車無料券</h4>
-          <p class="text-xs text-slate-500">日南市内 トゥクトゥク全線（1名様有効）</p>
+        <div class="p-4 rounded-2xl bg-white border-2 border-pink-100 shadow-sm space-y-2.5">
+          <div class="flex justify-between items-center border-b border-pink-100 pb-2">
+            <span class="text-xs font-bold text-slate-400">特典内容</span>
+            <span class="text-xs font-black text-rose-500 bg-pink-50 px-2.5 py-0.5 rounded-full border border-pink-100">
+              お会計金額より 1,000円引き
+            </span>
+          </div>
+          <div class="text-center py-1">
+            <div class="text-2xl font-black text-rose-500 font-mono">¥1,000 OFF</div>
+            <h4 class="text-base font-black text-slate-800">日南のお店で使える商品券 1,000円分</h4>
+            <p class="text-xs text-slate-400 font-medium">高校生SNSスタンプラリー 5スポット達成特典</p>
+          </div>
         </div>
 
-        <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs">
-          <strong>乗車方法：</strong>ドライバーにこの画面をお見せください。確認後に下のボタンを押してください。
+        <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed font-medium">
+          <strong>【店員様へのお願い】：</strong>高校生SNSスタンプラリーの達成特典画面です。上記リアルタイム時計の稼働をご確認の上、お会計合計金額より1,000円分のお値引きをお願いいたします。
         </div>
 
-        <button onclick="markTicketUsed()" class="w-full py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-lg">
-          乗車確認：使用完了にする
+        <button onclick="markTicketUsed()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 text-white font-black text-sm sm:text-base shadow-md shadow-pink-200 active:scale-95 transition-all">
+          お会計で利用完了にする（使用済みにする）
         </button>
       </div>
     </div>
   </div>
 
   <!-- Celebration Modal -->
-  <div id="celebration-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs hidden">
-    <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl border-2 border-amber-300 space-y-4">
-      <div class="text-5xl animate-bounce">🎉</div>
-      <div class="space-y-1">
-        <span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-700 text-xs font-black">CONGRATULATIONS!</span>
-        <h3 class="text-xl font-black text-slate-900">スタンプ5つ達成！<br>無料チケット獲得！</h3>
-        <p class="text-xs text-slate-600">日南の魅力を発信してくれてありがとう！「日南トゥクトゥク 1回無料乗車券」が発行されました！</p>
+  <div id="celebration-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden">
+    <div class="bg-white w-full max-w-sm rounded-[36px] overflow-hidden shadow-2xl border-4 border-pink-100 text-center relative p-6 space-y-4">
+      <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-rose-400 via-pink-400 to-amber-300 text-white mx-auto flex items-center justify-center text-4xl shadow-xl shadow-pink-300/50 animate-bounce">
+        🎉
       </div>
-      <button onclick="closeCelebrationAndGoTicket()" class="w-full py-3 rounded-2xl bg-orange-500 text-white font-black text-sm shadow-md">
-        チケットを確認する →
+      <div class="space-y-1.5">
+        <span class="inline-block px-3 py-1 rounded-full bg-pink-100 text-rose-500 text-xs font-black uppercase border border-pink-200">˗ˏˋ MISSION COMPLETE! ˎˊ˗</span>
+        <h3 class="text-xl font-black text-slate-800 leading-tight">スタンプ5つ達成！<br>1,000円分商品券獲得♡</h3>
+        <p class="text-xs text-slate-500 leading-relaxed font-medium">日南のエモいスポットを巡って魅力をシェアしてくれてありがとう！『日南のお店で使える商品券1,000円分』がプレゼントされたよ🛍️✨</p>
+      </div>
+      <button onclick="closeCelebrationAndGoTicket()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 text-white font-black text-sm shadow-md shadow-pink-200 active:scale-95 transition-all">
+        獲得した商品券を見に行く♡ →
       </button>
     </div>
   </div>
@@ -323,11 +417,19 @@
         subtitle: '日南海岸の断崖洞窟に佇む神秘の神社',
         category: 'パワースポット・絶景',
         description: '太平洋の荒波が打ち寄せる海食洞の中に本殿が佇む洞窟神社。「運玉投げ」は勝負運・縁結び祈願で高校生にも大人気！',
-        tukTukTip: '潮風を感じながら日南海岸ロードを爽快ドライブ！',
+        jrTip: '荒波迫る神秘の洞窟と鮮やかな朱色社殿！亀石の窪みへ運玉を投げる開運チャレンジと、どこまでも青い日南海岸の絶景は感動の連続です。',
+        recommendPoint: '荒波迫る神秘の洞窟と鮮やかな朱色社殿！亀石の窪みへ運玉を投げる開運チャレンジと、どこまでも青い日南海岸の絶景は感動の連続です。',
         photoTip: '朱色の鮮やかな鳥居越しの青い海！運玉を投げる瞬間を連写で狙おう。',
-        hashtags: ['#日南トゥクトゥク', '#鵜戸神宮', '#運玉チャレンジ', '#日南観光'],
-        imageUrl: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80',
-        order: 1
+        hashtags: ['#日南エモ旅', '#鵜戸神宮', '#運玉チャレンジ', '#日南観光', '#宮崎トリップ'],
+        imageUrl: '/spots/udo_jingu_shrine_1790225813383.jpg',
+        order: 1,
+        mapQuery: '鵜戸神宮 日南市',
+        stampIcon: '⛩️',
+        stampName: '鵜戸神宮 運玉・洞窟社殿',
+        stampShort: '運玉祈願',
+        stampColor: '#E11D48',
+        lat: 31.6506,
+        lng: 131.4667
       },
       {
         id: 'sunmesse',
@@ -335,11 +437,19 @@
         subtitle: '青い海を背に並ぶ7体の完全復刻モアイ像',
         category: 'アート・絶景スポット',
         description: 'イースター島の長老会から世界で唯一公式復刻を許可されたモアイ像。虹色のベンチや太陽の丘など映え写真の聖地！',
-        tukTukTip: '急な坂道もトゥクトゥクで一気に爽快クライム！',
+        jrTip: '日南の青空と太平洋の大パノラマを背に佇む7体の巨石モアイ像！虹色ベンチや太陽の丘など、歩くだけで元気がもらえるエモさNo.1の開放感！',
+        recommendPoint: '日南の青空と太平洋の大パノラマを背に佇む7体の巨石モアイ像！虹色ベンチや太陽の丘など、歩くだけで元気がもらえるエモさNo.1の開放感！',
         photoTip: '7体のモアイ像の前で友達と同じポーズで並んでジャンプ！',
-        hashtags: ['#日南トゥクトゥク', '#サンメッセ日南', '#モアイ像', '#映え旅'],
-        imageUrl: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=800&q=80',
-        order: 2
+        hashtags: ['#日南エモ旅', '#サンメッセ日南', '#モアイ像', '#宮崎絶景', '#日南観光'],
+        imageUrl: '/spots/sunmesse_moai_1790225825551.jpg',
+        order: 2,
+        mapQuery: 'サンメッセ日南',
+        stampIcon: '🗿',
+        stampName: 'サンメッセ日南 7体のモアイ像',
+        stampShort: 'モアイ像',
+        stampColor: '#0284C7',
+        lat: 31.6543,
+        lng: 131.4611
       },
       {
         id: 'obi-castle',
@@ -347,47 +457,219 @@
         subtitle: '「九州の小京都」風情ある武家屋敷と食べ歩き',
         category: '歴史・レトロ・グルメ',
         description: '名物の「飫肥天」やプリンのように甘い「厚焼卵」の食べ歩きが大好評。鯉が泳ぐ清らかな水路沿いを散策！',
-        tukTukTip: '小回りの利くトゥクトゥクで狭い城下町の小路もスイスイ。',
+        jrTip: '「九州の小京都」と称される江戸情緒あふれる石垣と飫肥杉の並木道。清流を泳ぐ錦鯉を眺めながら、揚げたて飫肥天や名物厚焼卵を食べ歩き！',
+        recommendPoint: '「九州の小京都」と称される江戸情緒あふれる石垣と飫肥杉の並木道。清流を泳ぐ錦鯉を眺めながら、揚げたて飫肥天や名物厚焼卵を食べ歩き！',
         photoTip: '大手門前の石垣や、食べ歩きグルメを手前に合わせたショット！',
-        hashtags: ['#日南トゥクトゥク', '#飫肥城下町', '#飫肥天食べ歩き', '#小京都日南'],
-        imageUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
-        order: 3
+        hashtags: ['#日南エモ旅', '#飫肥城下町', '#飫肥天食べ歩き', '#小京都日南', '#城下町散策'],
+        imageUrl: '/spots/obi_castle_town_1790225837355.jpg',
+        order: 3,
+        mapQuery: '飫肥城跡 日南市',
+        stampIcon: '🏯',
+        stampName: '飫肥城下町 飫肥城大手門',
+        stampShort: '飫肥城門',
+        stampColor: '#059669',
+        lat: 31.6268,
+        lng: 131.3533
       },
       {
-        id: 'aburatsu',
-        name: '油津商店街＆赤レンガ館',
-        subtitle: 'レトロモダンな赤レンガとカープ愛あふれる街',
+        id: 'aburatsu-shotengai',
+        name: '油津商店街（あぶらつしょうてんがい）',
+        subtitle: '再生されたレトロアーケードと若者カルチャー・カフェ',
         category: 'カルチャー・カフェ',
-        description: '大正時代の油津赤レンガ館やお洒落なカフェが点在。広島東洋カープの春季キャンプ地としても有名！',
-        tukTukTip: '港町の風とノスタルジックな商店街を巡るのんびりルート。',
-        photoTip: '赤レンガ館の重厚な壁をバックにしたストリートスナップ！',
-        hashtags: ['#日南トゥクトゥク', '#油津商店街', '#油津赤レンガ館', '#あぶらつ'],
-        imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
-        order: 4
+        description: '全国的な商店街再生の先進モデルとして知られる活気あるアーケード。お洒落なリノベカフェやスイーツショップが並びます。',
+        jrTip: '昭和レトロなアーケードとお洒落なリノベカフェが融合！カープファンが集う情熱的な真っ赤な街並みと、若者が集まる温かいコミュニティが魅力。',
+        recommendPoint: '昭和レトロなアーケードとお洒落なリノベカフェが融合！カープファンが集う情熱的な真っ赤な街並みと、若者が集まる温かいコミュニティが魅力。',
+        photoTip: 'リノベカフェのお洒落なドリンクやアーケードネオンと一緒にストリートスナップ！',
+        hashtags: ['#日南エモ旅', '#油津商店街', '#日南カフェ', '#あぶらつ散歩', '#レトロ商店街'],
+        imageUrl: '/spots/aburatsu_shotengai_1790226029273.jpg',
+        order: 4,
+        mapQuery: '油津商店街 日南市',
+        stampIcon: '🏮',
+        stampName: '油津商店街 レトロアーケード',
+        stampShort: '油津アーケード',
+        stampColor: '#D97706',
+        lat: 31.5836,
+        lng: 131.3986
       },
       {
-        id: 'nango',
-        name: '道の駅なんごう＆栄松ビーチ',
-        subtitle: '南国情緒満点のパノラマと完熟マンゴースイーツ',
+        id: 'aburatsu-redbrick',
+        name: '油津赤レンガ館（あぶらつあかれんがかん）',
+        subtitle: '国登録有形文化財！大正ロマン漂うレトロ建築とカープ愛',
+        category: '歴史・レトロ建築',
+        description: '大正10年建造の重厚な赤レンガ倉庫建築（国登録有形文化財）。港町油津の歴史を象徴する美しい佇まい。',
+        jrTip: '大正10年建造の赤レンガ倉庫と堀川運河のレトロな風情。夕暮れ時はレンガ壁が茜色に輝き、タイムスリップしたようなノスタルジックな写真が撮れます。',
+        recommendPoint: '大正10年建造の赤レンガ倉庫と堀川運河のレトロな風情。夕暮れ時はレンガ壁が茜色に輝き、タイムスリップしたようなノスタルジックな写真が撮れます。',
+        photoTip: '歴史ある赤レンガ壁をバックにしたポートレート撮影がおすすめ！',
+        hashtags: ['#日南エモ旅', '#油津赤レンガ館', '#大正ロマン', '#登録有形文化財', '#堀川運河'],
+        imageUrl: '/spots/aburatsu_redbrick_1790225848067.jpg',
+        order: 5,
+        mapQuery: '油津赤レンガ館 日南市',
+        stampIcon: '🧱',
+        stampName: '油津赤レンガ館 大正ロマン',
+        stampShort: '赤レンガ館',
+        stampColor: '#B91C1C',
+        lat: 31.5819,
+        lng: 131.4011
+      },
+      {
+        id: 'michi-no-eki-nango',
+        name: '道の駅なんごう',
+        subtitle: '日南海岸を一望する絶景テラスと完熟マンゴーソフト',
         category: '南国スイーツ・パノラマ',
-        description: '日南海岸国定公園の南端に位置し、コバルトブルーの日向灘を一望。濃厚な完熟マンゴーソフトクリームが絶品！',
-        tukTukTip: '絶景海岸ロードをフルオープンで爽快クルーズ！',
+        description: '日南海岸国定公園の南端の高台に位置し、コバルトブルーの日向灘を一望。濃厚な完熟マンゴーソフトクリームが絶品！',
+        jrTip: '日南海岸を一望するウッドデッキテラスと濃厚完熟マンゴーソフト！日南の太陽を浴びた特産マンゴーの甘みと果汁感は、旅の疲れを一瞬で癒してくれます。',
+        recommendPoint: '日南海岸を一望するウッドデッキテラスと濃厚完熟マンゴーソフト！日南の太陽を浴びた特産マンゴーの甘みと果汁感は、旅の疲れを一瞬で癒してくれます。',
         photoTip: '海原を見渡すデッキでマンゴーソフトクリームを掲げて撮影！',
-        hashtags: ['#日南トゥクトゥク', '#道の駅なんごう', '#完熟マンゴーソフト', '#日南ドライブ'],
-        imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-        order: 5
+        hashtags: ['#日南エモ旅', '#道の駅なんごう', '#完熟マンゴーソフト', '#日南絶景', '#南国宮崎'],
+        imageUrl: '/spots/nango_mango_view_1790225858383.jpg',
+        order: 6,
+        mapQuery: '道の駅なんごう 日南市',
+        stampIcon: '🥭',
+        stampName: '道の駅なんごう 完熟マンゴー',
+        stampShort: '完熟マンゴー',
+        stampColor: '#EA580C',
+        lat: 31.5039,
+        lng: 131.3789
+      },
+      {
+        id: 'sakaematsu-beach',
+        name: '栄松ビーチ・アイランドキャンプ',
+        subtitle: 'エメラルドグリーンの透明な海と白い砂浜の入江',
+        category: '海・ビーチ・自然',
+        description: '波が穏やかな天然の入江に広がる白い砂浜と、抜群の透明度を誇る海水浴場。小島を眺めながらシーカヤックも！',
+        jrTip: '宮崎屈指の透明度を誇るエメラルドグリーンの入江！波がとても穏やかで、白い砂浜と緑の小島に囲まれた隠れ家リゾートのような癒し空間。',
+        recommendPoint: '宮崎屈指の透明度を誇るエメラルドグリーンの入江！波がとても穏やかで、白い砂浜と緑の小島に囲まれた隠れ家リゾートのような癒し空間。',
+        photoTip: '透明度抜群の浅瀬の波打ち際で爽快ブルーショット！',
+        hashtags: ['#日南エモ旅', '#栄松ビーチ', '#エメラルドグリーン', '#日南の海', '#南郷リゾート'],
+        imageUrl: '/spots/sakaematsu_beach_1790226042438.jpg',
+        order: 7,
+        mapQuery: '栄松ビーチ 日南市',
+        stampIcon: '🏖️',
+        stampName: '栄松ビーチ エメラルド海',
+        stampShort: '栄松ビーチ',
+        stampColor: '#0891B2',
+        lat: 31.5276,
+        lng: 131.3853
       },
       {
         id: 'futo-beach',
-        name: '富土（ふと）海岸＆トトロの森',
-        subtitle: '透明度抜群のビーチと話題のフォトスポット',
-        category: '海・自然・写真映え',
+        name: '富土海岸（ふとかいがん）',
+        subtitle: 'フェニックス並木が続く白砂ビーチと夕暮れマジックアワー',
+        category: '海・絶景ビーチ',
         description: '白い砂浜と澄んだエメラルドグリーンの海水が美しい人気ビーチ。夕暮れ時のシルエット写真がエモい！',
-        tukTukTip: '海岸線沿いのフェニックス並木をトゥクトゥクで疾走！',
+        jrTip: '「快水浴場百選」の美しい白砂と、青空に映えるヤシの木（フェニックス）並木！夕暮れ時には水平線がオレンジ色に染まるマジックアワーが息をのむ美しさ。',
+        recommendPoint: '「快水浴場百選」の美しい白砂と、青空に映えるヤシの木（フェニックス）並木！夕暮れ時には水平線がオレンジ色に染まるマジックアワーが息をのむ美しさ。',
         photoTip: '水平線に沈む太陽とキラキラ光る水面をバックにしたシルエット。',
-        hashtags: ['#日南トゥクトゥク', '#富土海岸', '#日南ビーチ', '#エモい放課後'],
-        imageUrl: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80',
-        order: 6
+        hashtags: ['#日南エモ旅', '#富土海岸', '#フェニックス並木', '#日本の快水浴場百選', '#マジックアワー'],
+        imageUrl: '/spots/futo_beach_nichinan_1790225868581.jpg',
+        order: 8,
+        mapQuery: '富土海水浴場 日南市',
+        stampIcon: '🌴',
+        stampName: '富土海岸 フェニックス並木',
+        stampShort: 'フェニックス',
+        stampColor: '#2563EB',
+        lat: 31.6841,
+        lng: 131.4633
+      },
+      {
+        id: 'futo-totoro',
+        name: '富土のトトロの森（ふとのトトロのもり）',
+        subtitle: '木造民家の前で迎える大きなトトロ像＆「富土の森」バス停！',
+        category: '写真映え・人気スポット',
+        description: '木造のお家の前に大きなトトロと小さなトトロたちの像が並び、「のりば 富土の森」のレトロな丸型バス停標識が立っています。※個人のお宅の前ですのでマナーを守って静かに撮影しましょう。',
+        jrTip: '地元の方の温かいおもてなしと手作りの愛が詰まった名所！ジブリの世界に入り込んだかのような丸型バス停とトトロ像は、訪れる人みんなを笑顔にします。',
+        recommendPoint: '地元の方の温かいおもてなしと手作りの愛が詰まった名所！ジブリの世界に入り込んだかのような丸型バス停とトトロ像は、訪れる人みんなを笑顔にします。',
+        photoTip: '「富土の森」バス停標識と大きなトトロ像の間に立って、同じ表情で並んで撮るのが一番人気！',
+        hashtags: ['#日南エモ旅', '#富土のトトロの森', '#トトロの森', '#富土の森', '#日南映えスポット'],
+        imageUrl: '/spots/futo_totoro_exact_1790226527846.jpg',
+        order: 9,
+        mapQuery: '富土のトトロの森 日南市',
+        stampIcon: '🚏',
+        stampName: '富土の森 トトロバス停',
+        stampShort: 'トトロの森',
+        stampColor: '#15803D',
+        lat: 31.6865,
+        lng: 131.4622
+      },
+      {
+        id: 'aburatsu-coffee',
+        name: '油津珈琲＋（ABURATSU COFFEE）',
+        subtitle: '昭和レトロ喫茶を再生！厚焼き卵サンド＆昔懐かしナポリタン',
+        category: '人気カフェ・喫茶',
+        description: '油津商店街を象徴するコミュニティカフェ。レトロな雰囲気で厚焼き卵サンドやクリームソーダが高校生にも大人気！',
+        jrTip: '昭和レトロな純喫茶の温もりに包まれる極上カフェ時間！溢れんばかりの分厚い玉子サンドと鮮やかなクリームソーダは、日南散策の最高のご褒美！',
+        recommendPoint: '昭和レトロな純喫茶の温もりに包まれる極上カフェ時間！溢れんばかりの分厚い玉子サンドと鮮やかなクリームソーダは、日南散策の最高のご褒美！',
+        photoTip: 'レトロな木製カウンターでクリームソーダや厚焼き卵サンドをパシャリ！',
+        hashtags: ['#日南エモ旅', '#油津珈琲', '#油津カフェ', '#レトロ喫茶', '#厚焼き卵サンド'],
+        imageUrl: '/spots/aburatsu_coffee_1790226645233.jpg',
+        order: 10,
+        mapQuery: '油津珈琲 日南市',
+        stampIcon: '🍹',
+        stampName: '油津珈琲 クリームソーダ',
+        stampShort: 'クリームソーダ',
+        stampColor: '#92400E',
+        lat: 31.5835,
+        lng: 131.3985
+      },
+      {
+        id: 'bibinya',
+        name: 'びびんや（名物・カツオ炙り重）',
+        subtitle: '日南一本釣りカツオを七輪で炙る！行列必至の海鮮名店',
+        category: '名物グルメ・海鮮',
+        description: '一本釣りカツオ水揚げ日本一の日南を代表する海鮮店。新鮮なカツオを小さな七輪で炙る「カツオ炙り重」は感動の味！',
+        jrTip: '一本釣りカツオ日本一・日南ならではの贅沢ごちそう！卓上七輪で炭火の香りをまとわせたカツオは脂がのってとろける旨さ。日南観光で絶対に外せない味！',
+        recommendPoint: '一本釣りカツオ日本一・日南ならではの贅沢ごちそう！卓上七輪で炭火の香りをまとわせたカツオは脂がのってとろける旨さ。日南観光で絶対に外せない味！',
+        photoTip: '七輪で香ばしく煙を上げるカツオと豪華なお重を斜め上から撮影！',
+        hashtags: ['#日南エモ旅', '#びびんや', '#カツオ炙り重', '#一本釣りカツオ', '#日南グルメ'],
+        imageUrl: '/spots/bibinya_katsuo_1790226658024.jpg',
+        order: 11,
+        mapQuery: 'びびんや 日南市',
+        stampIcon: '🐟',
+        stampName: 'びびんや 名物カツオ炙り',
+        stampShort: 'カツオ炙り',
+        stampColor: '#DC2626',
+        lat: 31.5847,
+        lng: 131.4042
+      },
+      {
+        id: 'obiten-kura',
+        name: '郷土料理 おび天 蔵（おびてん くら）',
+        subtitle: '江戸時代の長倉で味わう！揚げたてふわふわ名物「おび天」',
+        category: '名物グルメ・城下町',
+        description: '飫肥城大手門通りの江戸時代の長倉を活用した風情ある名店。豆腐と魚のすり身を揚げた「おび天」はほんのり甘くふんわり！',
+        jrTip: '江戸時代の長倉をリノベした歴史空間で味わう揚げたて「おび天」！豆腐と魚のすり身に黒砂糖を効かせたふんわり優しい甘さは、日南伝統のソウルフード！',
+        recommendPoint: '江戸時代の長倉をリノベした歴史空間で味わう揚げたて「おび天」！豆腐と魚のすり身に黒砂糖を効かせたふんわり優しい甘さは、日南伝統のソウルフード！',
+        photoTip: '木造長倉の暖簾をバックに竹かごの揚げたておび天を手持ちで撮影！',
+        hashtags: ['#日南エモ旅', '#おび天蔵', '#おび天', '#飫肥城下町グルメ', '#郷土の味'],
+        imageUrl: '/spots/obiten_kura_1790226670434.jpg',
+        order: 12,
+        mapQuery: '郷土料理 おび天 蔵 日南市',
+        stampIcon: '🍢',
+        stampName: 'おび天 蔵 揚げたて名物',
+        stampShort: '名物おび天',
+        stampColor: '#B45309',
+        lat: 31.6258,
+        lng: 131.3551
+      },
+      {
+        id: 'iina-pudding',
+        name: 'プリン工房イーナ（油津店）',
+        subtitle: 'とろける濃厚プレミアム食感！油津商店街の絶品スイーツ',
+        category: '人気スイーツ・カフェ',
+        description: '油津商店街「ABURATSU GARDEN」にある人気プリン専門店。九州厳選素材を使用したとろ〜り濃厚プリンは至福！',
+        jrTip: '九州産厳選ミルクと新鮮卵のコクが詰まった極上プリン！とろ〜りとろける濃厚食感と可愛いガラス瓶パッケージは、日南エモ旅のご褒美スイーツに大人気！',
+        recommendPoint: '九州産厳選ミルクと新鮮卵のコクが詰まった極上プリン！とろ〜りとろける濃厚食感と可愛いガラス瓶パッケージは、日南エモ旅のご褒美スイーツに大人気！',
+        photoTip: '可愛いガラス瓶プリンとロゴパッケージをアップで映え撮影！',
+        hashtags: ['#日南エモ旅', '#プリン工房イーナ', '#油津スイーツ', '#とろけるプリン', '#日南おやつ'],
+        imageUrl: '/spots/iina_pudding_1790226683118.jpg',
+        order: 13,
+        mapQuery: 'プリン工房イーナ 油津店 日南市',
+        stampIcon: '🍮',
+        stampName: 'プリン工房イーナ 極上プリン',
+        stampShort: 'とろけるプリン',
+        stampColor: '#CA8A04',
+        lat: 31.5838,
+        lng: 131.3982
       }
     ];
 
@@ -397,26 +679,124 @@
       isUnlocked: false,
       isUsed: false,
       usedAt: null,
-      code: 'NTT-2026-X8K9'
+      code: 'NIC-1000-2026-X8K9'
     };
     let activeModalSpot = null;
     let currentPreviewUrl = '';
 
+    let currentLang = localStorage.getItem('nichinan_selected_lang') || 'ja';
+    let userLocation = null;
+    let locationStatus = 'idle';
+    let sortMode = 'distance';
+
+    function calcDistanceKm(lat1, lon1, lat2, lon2) {
+      const R = 6371;
+      const dLat = ((lat2 - lat1) * Math.PI) / 180;
+      const dLon = ((lon2 - lon1) * Math.PI) / 180;
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+    }
+
+    function formatDist(km) {
+      if (km === undefined || isNaN(km)) return '';
+      if (km < 1) return `${Math.round(km * 1000)}m`;
+      return `${km.toFixed(1)}km`;
+    }
+
+    function updateLocationUI() {
+      const statusEl = document.getElementById('standalone-location-status');
+      const distBtn = document.getElementById('btn-sort-dist');
+      const recomBtn = document.getElementById('btn-sort-recom');
+      if (statusEl) {
+        if (locationStatus === 'loading') statusEl.innerText = '現在地を取得中...';
+        else if (locationStatus === 'ready') statusEl.innerText = '現在地から近い順に表示中 (GPS取得済)';
+        else if (locationStatus === 'simulated') statusEl.innerText = '日南駅周辺からシミュレート中（近い順）';
+        else if (locationStatus === 'denied') statusEl.innerText = '位置情報が未許可のためおすすめ順で表示中';
+      }
+      if (distBtn && recomBtn) {
+        if (sortMode === 'distance') {
+          distBtn.className = 'px-2.5 py-1 rounded-lg bg-rose-500 text-white shadow-2xs';
+          recomBtn.className = 'px-2.5 py-1 rounded-lg text-slate-600';
+        } else {
+          distBtn.className = 'px-2.5 py-1 rounded-lg text-slate-600';
+          recomBtn.className = 'px-2.5 py-1 rounded-lg bg-rose-500 text-white shadow-2xs';
+        }
+      }
+    }
+
+    function requestStandaloneLocation() {
+      if (!('geolocation' in navigator)) {
+        locationStatus = 'denied';
+        updateLocationUI();
+        return;
+      }
+      locationStatus = 'loading';
+      updateLocationUI();
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          locationStatus = 'ready';
+          sortMode = 'distance';
+          updateLocationUI();
+          renderSpotsList();
+          renderGuideList();
+        },
+        err => {
+          locationStatus = 'denied';
+          updateLocationUI();
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+      );
+    }
+
+    function simulateNichinanStandalone() {
+      userLocation = { lat: 31.6022, lng: 131.3783 };
+      locationStatus = 'simulated';
+      sortMode = 'distance';
+      updateLocationUI();
+      renderSpotsList();
+      renderGuideList();
+    }
+
+    function setSortMode(mode) {
+      sortMode = mode;
+      if (mode === 'distance' && !userLocation) {
+        requestStandaloneLocation();
+      }
+      updateLocationUI();
+      renderSpotsList();
+      renderGuideList();
+    }
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('nichinan_selected_lang', lang);
+      const sel = document.getElementById('header-lang-select');
+      if (sel) sel.value = lang;
+      renderApp();
+    }
+
     // Init App
     function init() {
-      const savedStamps = localStorage.getItem('nichinan_tuktuk_stamps_v1');
+      const savedStamps = localStorage.getItem('nichinan_jr_stamps_v2') || localStorage.getItem('nichinan_tuktuk_stamps_v1');
       if (savedStamps) userStamps = JSON.parse(savedStamps);
 
-      const savedTicket = localStorage.getItem('nichinan_tuktuk_ticket_v1');
+      const savedTicket = localStorage.getItem('nichinan_jr_ticket_v2') || localStorage.getItem('nichinan_tuktuk_ticket_v1');
       if (savedTicket) userTicket = JSON.parse(savedTicket);
 
+      const sel = document.getElementById('header-lang-select');
+      if (sel) sel.value = currentLang;
+
       renderApp();
+      requestStandaloneLocation();
       startDriverClock();
     }
 
     function saveState() {
-      localStorage.setItem('nichinan_tuktuk_stamps_v1', JSON.stringify(userStamps));
-      localStorage.setItem('nichinan_tuktuk_ticket_v1', JSON.stringify(userTicket));
+      localStorage.setItem('nichinan_jr_stamps_v2', JSON.stringify(userStamps));
+      localStorage.setItem('nichinan_jr_ticket_v2', JSON.stringify(userTicket));
     }
 
     function renderApp() {
@@ -440,16 +820,16 @@
 
     function renderStampCard() {
       const count = userStamps.length;
-      document.getElementById('stamp-badge-pill').innerText = `${count} / 5 達成`;
+      document.getElementById('stamp-badge-pill').innerText = `${count} / 5 個完了 💕`;
       const remaining = Math.max(0, 5 - count);
       const percent = Math.min(100, Math.round((count / 5) * 100));
 
       const progressText = document.getElementById('progress-text');
       if (count >= 5) {
-        progressText.innerHTML = '<span class="text-emerald-600 font-black">5スタンプコンプリート達成！🎉</span>';
+        progressText.innerHTML = '<span class="text-emerald-500 font-black">5スタンプコンプリート！えらい！🎉✨</span>';
         document.getElementById('home-congrats-banner').classList.remove('hidden');
       } else {
-        progressText.innerText = `あと ${remaining} 個で無料チケット獲得！🚗💨`;
+        progressText.innerText = `あと ${remaining} 個で1,000円商品券解放！GO〜🛍️💨`;
         document.getElementById('home-congrats-banner').classList.add('hidden');
       }
       document.getElementById('progress-percent').innerText = `${percent}%`;
@@ -465,18 +845,29 @@
         const isFilled = !!stamp;
 
         const slot = document.createElement('div');
-        slot.className = 'flex flex-col items-center gap-1';
+        slot.className = 'flex flex-col items-center gap-1.5 cursor-pointer';
+        slot.onclick = () => {
+          if (spot) openStampModal(spot.id);
+        };
         slot.innerHTML = `
-          <div class="w-13 h-13 sm:w-16 sm:h-16 rounded-2xl flex flex-col items-center justify-center transition-all ${
+          <div class="w-13 h-14 sm:w-16 sm:h-18 rounded-[20px] flex flex-col items-center justify-center transition-all ${
             isFilled
-              ? 'bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-md ring-2 ring-orange-300'
-              : 'border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400'
+              ? 'bg-gradient-to-b from-rose-400 to-pink-500 text-white shadow-md shadow-pink-300/40 ring-2 ring-pink-200'
+              : 'border-2 border-dashed border-pink-200 bg-white/70 text-pink-300'
           }">
-            ${isFilled 
-              ? '<span class="text-xl sm:text-2xl">🛺</span><span class="text-[8px] font-black text-amber-100">GET!</span>' 
-              : `<span class="text-xs font-bold">${i + 1}</span><span class="text-[8px]">未獲得</span>`}
+            ${isFilled ? `
+              <div class="text-center p-1 flex flex-col items-center">
+                <span class="text-xl sm:text-2xl">${spot ? spot.stampIcon : '⭐'}</span>
+                <span class="text-[9px] font-black tracking-tight line-clamp-1 mt-0.5 text-yellow-100">${spot ? spot.stampShort : 'CLEARED!'}</span>
+              </div>
+            ` : `
+              <div class="text-center">
+                <span class="text-xs font-black text-pink-300/80">0${i + 1}</span>
+                <span class="block text-[8px] font-bold text-pink-300/80">WAITING</span>
+              </div>
+            `}
           </div>
-          <span class="text-[10px] text-center font-medium text-slate-600 line-clamp-1 max-w-[62px]">
+          <span class="text-[10px] text-center font-bold text-slate-600 line-clamp-1 max-w-[62px]">
             ${spot ? spot.name.split('（')[0] : `SPOT ${i + 1}`}
           </span>
         `;
@@ -485,40 +876,91 @@
     }
 
     function renderSpotsList() {
-      const container = document.getElementById('spots-list');
+      const container = document.getElementById('spots-list-container');
       container.innerHTML = '';
+      document.getElementById('spots-count-badge').innerText = `獲得：${userStamps.length} / ${SPOTS.length}`;
 
       SPOTS.forEach(spot => {
-        const isStamped = userStamps.some(s => s.spotId === spot.id);
+        if (userLocation) {
+          spot.distanceKm = calcDistanceKm(userLocation.lat, userLocation.lng, spot.lat, spot.lng);
+        } else {
+          spot.distanceKm = undefined;
+        }
+      });
+
+      const displaySpots = [...SPOTS];
+      if (sortMode === 'distance' && userLocation) {
+        displaySpots.sort((a, b) => (a.distanceKm ?? 99999) - (b.distanceKm ?? 99999));
+      } else {
+        displaySpots.sort((a, b) => a.order - b.order);
+      }
+
+      displaySpots.forEach(spot => {
+        const stamp = userStamps.find(s => s.spotId === spot.id);
+        const isStamped = !!stamp;
+
         const card = document.createElement('div');
-        card.className = `bg-white rounded-3xl overflow-hidden border shadow-sm transition-all ${isStamped ? 'border-emerald-200' : 'border-slate-200'}`;
+        card.className = `bg-white rounded-[28px] overflow-hidden border-2 transition-all shadow-sm ${
+          isStamped ? 'border-pink-200 ring-2 ring-pink-100' : 'border-pink-100/80'
+        }`;
         card.innerHTML = `
-          <div class="relative h-44 sm:h-48 w-full">
+          <div class="relative h-48 sm:h-52 w-full overflow-hidden">
             <img src="${spot.imageUrl}" alt="${spot.name}" class="w-full h-full object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-            <div class="absolute top-3 left-3 flex gap-1.5">
-              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/90 text-slate-800">📍 ${spot.category}</span>
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-orange-500 text-white">No.${spot.order}</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+            <div class="absolute top-3.5 left-3.5 flex flex-wrap items-center gap-1.5 max-w-[70%]">
+              <span class="px-3 py-1 rounded-full text-[11px] font-black bg-white/95 text-slate-700 shadow-xs border border-pink-100">📍 ${spot.category}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-rose-400 to-pink-500 text-white">#${spot.order}</span>
+              ${spot.distanceKm !== undefined ? `
+                <span class="px-2.5 py-1 rounded-full text-[11px] font-black bg-white/95 text-rose-600 shadow-xs border border-rose-200">
+                  📍 現在地から ${formatDist(spot.distanceKm)}
+                </span>
+              ` : ''}
             </div>
-            ${isStamped ? '<div class="absolute top-3 right-3 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-black">✓ 獲得済み</div>' : ''}
-            <div class="absolute bottom-3 left-3 right-3 text-white">
-              <h4 class="font-black text-base sm:text-lg leading-snug">${spot.name}</h4>
-              <p class="text-xs text-amber-200 line-clamp-1">${spot.subtitle}</p>
+            ${isStamped ? `
+              <div class="absolute top-3.5 right-3.5 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-rose-500 text-xs font-black shadow-md border-2 border-pink-200">
+                <span>${spot.stampIcon}</span><span>${spot.stampShort} スタンプGET済 ♡</span>
+              </div>
+            ` : ''}
+            <div class="absolute bottom-3.5 left-3.5 right-3.5 text-white">
+              <h3 class="font-black text-lg sm:text-xl leading-snug drop-shadow-md">${spot.name}</h3>
+              <p class="text-xs text-pink-200 font-bold line-clamp-1 mt-0.5">${spot.subtitle}</p>
             </div>
           </div>
-          <div class="p-4 sm:p-5 space-y-3">
-            <p class="text-xs text-slate-600 leading-relaxed">${spot.description}</p>
-            <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-slate-700">
-              <strong class="text-orange-700 font-bold">🛺 トゥクトゥク爽快ポイント：</strong>${spot.tukTukTip}
+          <div class="p-4 sm:p-5 space-y-3 bg-white">
+            <p class="text-xs text-slate-600 leading-relaxed font-medium">${spot.description}</p>
+            <div class="p-3 rounded-2xl bg-[#FFF6F3] border border-pink-100 flex items-start gap-2.5 text-slate-700 text-xs">
+              <span class="text-lg shrink-0">✨</span>
+              <div>
+                <strong class="text-rose-500 font-black">日南エモ旅おすすめPoint：</strong>
+                <span class="text-slate-600 font-medium">${spot.jrTip}</span>
+              </div>
             </div>
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <div class="pt-2 border-t border-pink-50">
               ${isStamped ? `
-                <span class="text-xs font-bold text-emerald-600">✓ スタンプ獲得完了</span>
-                <button onclick="openStampModal('${spot.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600">詳細を見る</button>
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-black text-rose-500 flex items-center gap-1">
+                    <span>${spot.stampIcon}</span>
+                    <span>${spot.stampShort} スタンプ獲得完了♡</span>
+                  </span>
+                  <div class="flex items-center gap-2">
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(spot.mapQuery || (spot.name + ' 日南市'))}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-full text-xs font-black bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 shadow-2xs flex items-center gap-1">
+                      <span>🧭 そこに行く！</span>
+                      ${spot.distanceKm !== undefined ? `<span class="text-[10px] font-bold text-amber-700 bg-amber-200/70 px-1.5 py-0.5 rounded-full">${formatDist(spot.distanceKm)}</span>` : ''}
+                    </a>
+                    <button onclick="openStampModal('${spot.id}')" class="px-3 py-1.5 rounded-full text-xs font-bold bg-slate-100 text-slate-500">内容確認</button>
+                  </div>
+                </div>
               ` : `
-                <button onclick="openStampModal('${spot.id}')" class="w-full py-2.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm">
-                  <span>📸 SNS投稿画像を提出してスタンプGET！</span>
-                </button>
+                <div class="flex items-center gap-2">
+                  <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(spot.mapQuery || (spot.name + ' 日南市'))}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-3 rounded-2xl bg-amber-50 hover:bg-amber-100 text-amber-900 border-2 border-amber-200 font-black text-xs shrink-0 flex items-center gap-1">
+                    <span>🧭 そこに行く！</span>
+                    ${spot.distanceKm !== undefined ? `<span class="text-[10px] font-bold text-amber-700 bg-amber-200/70 px-1.5 py-0.5 rounded-full">${formatDist(spot.distanceKm)}</span>` : ''}
+                  </a>
+                  <button onclick="openStampModal('${spot.id}')" class="flex-1 py-3 px-3 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 hover:from-rose-500 hover:to-pink-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md shadow-pink-200 active:scale-95 transition-all truncate">
+                    <span>${spot.stampIcon}</span>
+                    <span>${spot.stampShort} スタンプGET♡</span>
+                  </button>
+                </div>
               `}
             </div>
           </div>
@@ -534,40 +976,76 @@
 
       if (!isUnlocked && !isUsed) {
         container.innerHTML = `
-          <div class="bg-white rounded-3xl p-6 border-2 border-dashed border-slate-300 text-center space-y-4">
-            <div class="w-16 h-16 rounded-3xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center text-3xl">🔒</div>
-            <h3 class="text-lg font-black text-slate-700">チケットはまだロックされています</h3>
-            <p class="text-xs text-orange-600 font-bold">あと ${Math.max(0, 5 - userStamps.length)} 個のスタンプで解除されます！</p>
-            <button onclick="switchTab('home')" class="w-full py-3 rounded-2xl bg-orange-500 text-white text-xs sm:text-sm font-bold shadow-md">
+          <div class="bg-white/95 rounded-[32px] p-6 border-2 border-dashed border-pink-200 text-center space-y-4 shadow-sm shadow-pink-100">
+            <div class="w-16 h-16 rounded-3xl bg-pink-50 text-rose-400 mx-auto flex items-center justify-center text-3xl shadow-inner border border-pink-100">🔒</div>
+            <div class="space-y-1">
+              <h3 class="text-lg font-black text-slate-700">商品券はまだ鍵がかかってるよ🔒</h3>
+              <p class="text-xs text-rose-400 font-bold">あと <span class="text-lg font-black text-rose-500">${Math.max(0, 5 - userStamps.length)}</span> 個スタンプを集めると商品券1,000円分解放！✨</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-[#FFF8F6] border border-pink-100 text-left opacity-80">
+              <div class="flex items-center justify-between border-b border-pink-100 pb-2 mb-2">
+                <span class="text-xs font-black text-rose-400">🛍️ NICHINAN 1,000 YEN VOUCHER</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-pink-100 text-rose-400">LOCKED</span>
+              </div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-2xl font-black text-slate-400 font-mono">¥1,000</span>
+                <span class="text-xs font-black text-slate-600">日南のお店で使える商品券（1回限り）</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1 font-medium leading-relaxed">油津商店街のカフェスイーツ、飫肥城下町グルメ、お土産など、好きなお店で1,000円引きとして使えるよ♡</p>
+            </div>
+            <button onclick="switchTab('home')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 text-white text-xs sm:text-sm font-black shadow-md shadow-pink-200">
               スタンプを集めに行く →
             </button>
           </div>
         `;
       } else if (isUnlocked && !isUsed) {
         container.innerHTML = `
-          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-xl relative overflow-hidden border-2 border-amber-300">
-            <div class="flex items-center justify-between border-b border-white/25 pb-3 mb-3">
-              <span class="text-xs font-bold">🛺 日南トゥクトゥク観光推進協議会</span>
-              <span class="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-black">利用可能</span>
+          <div class="bg-gradient-to-br from-rose-400 via-pink-400 to-amber-300 rounded-[32px] p-5 sm:p-6 text-white shadow-xl shadow-pink-300/40 relative overflow-hidden border-2 border-white/60">
+            <div class="flex items-center justify-between border-b border-white/30 pb-3 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">🛍️</span>
+                <span class="text-xs font-black text-white">日南市商店街＆グルメ応援・高校生エモ旅特典</span>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-white text-rose-500 text-xs font-black shadow-xs">利用可能 ♡</span>
             </div>
-            <h3 class="text-xl sm:text-2xl font-black mb-2">日南トゥクトゥク 1回乗車無料券</h3>
-            <p class="text-xs text-amber-100 mb-4">SNSスタンプラリー5スポット達成特典！乗車時にドライバーに提示してください。</p>
-            <button onclick="openDriverModal()" class="w-full py-3.5 rounded-2xl bg-white text-orange-600 font-black text-sm shadow-lg">
-              👁️ 乗車時にドライバーに見せる →
+            
+            <div class="bg-white/95 rounded-2xl p-4 text-slate-800 shadow-sm border border-white/60 text-center my-3">
+              <span class="text-xs font-black text-rose-500 tracking-wider">SPECIAL COUPON</span>
+              <div class="flex items-center justify-center gap-1.5 my-1">
+                <span class="text-base font-black text-rose-400">¥</span>
+                <span class="text-4xl font-black font-mono tracking-tight text-slate-800">1,000</span>
+                <span class="text-xs font-black px-2 py-0.5 rounded-full bg-rose-50 text-rose-500 border border-pink-200">分 商品券</span>
+              </div>
+              <p class="text-xs font-black text-slate-700">日南のお店で使える商品券 1,000円分</p>
+              <p class="text-[11px] text-slate-500 font-medium mt-0.5">油津商店街・飫肥城下町・カフェ・グルメ・お土産店のお会計で使えます♡</p>
+            </div>
+
+            <div class="bg-black/15 backdrop-blur-md rounded-2xl p-3.5 grid grid-cols-2 gap-2 text-xs border border-white/20 mb-4">
+              <div>
+                <span class="text-[10px] text-pink-200 block font-bold">クーポン番号</span>
+                <span class="font-mono font-black text-sm">${userTicket.code || 'NIC-1000-2026-X8K9'}</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-pink-200 block font-bold">利用条件</span>
+                <span class="font-black text-sm">日南市内対象店舗（1会計1,000円引）</span>
+              </div>
+            </div>
+            <button onclick="openDriverModal()" class="w-full py-4 rounded-2xl bg-white hover:bg-pink-50 text-rose-500 font-black text-sm sm:text-base shadow-lg active:scale-95 transition-all">
+              👁️ お会計時に店員さんに見せる →
             </button>
           </div>
         `;
       } else if (isUsed) {
         container.innerHTML = `
-          <div class="bg-white rounded-3xl p-6 border-2 border-slate-200 text-center space-y-4">
-            <div class="w-20 h-20 rounded-full border-4 border-slate-400 text-slate-400 mx-auto flex flex-col items-center justify-center -rotate-12">
-              <span class="text-xs font-black">USED</span>
-              <span class="text-[9px]">使用済み</span>
+          <div class="bg-white/95 rounded-[32px] p-6 border-2 border-pink-100 text-center space-y-4 shadow-sm">
+            <div class="w-20 h-20 rounded-full border-4 border-rose-300 text-rose-400 mx-auto flex flex-col items-center justify-center -rotate-12 bg-pink-50/50">
+              <span class="text-[11px] font-black uppercase">USED</span>
+              <span class="text-[8px] font-bold">使用済み</span>
             </div>
-            <h3 class="text-lg font-black text-slate-700">チケットは使用済みです</h3>
-            <p class="text-xs text-slate-500">ご乗車いただきありがとうございました！</p>
-            <button onclick="resetData()" class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold">
-              ↺ もう一度最初から巡る（リセット）
+            <h3 class="text-lg font-black text-slate-700">商品券はご利用済みです♡</h3>
+            <p class="text-xs text-slate-400 font-medium">日南のお店でお買物やグルメを楽しんでくれてありがとう！美味しい思い出や素敵な買い物はできたかな？🛍️✨</p>
+            <button onclick="resetData()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-400 via-pink-400 to-amber-300 text-white text-xs font-black shadow-md shadow-pink-200">
+              ↺ もう一度最初から巡る（スタンプ・商品券をリセット）
             </button>
           </div>
         `;
@@ -578,20 +1056,48 @@
       const container = document.getElementById('guide-spots-list');
       container.innerHTML = '';
 
-      SPOTS.forEach(spot => {
+      const displaySpots = [...SPOTS];
+      if (sortMode === 'distance' && userLocation) {
+        displaySpots.sort((a, b) => (a.distanceKm ?? 99999) - (b.distanceKm ?? 99999));
+      } else {
+        displaySpots.sort((a, b) => a.order - b.order);
+      }
+
+      displaySpots.forEach(spot => {
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-3xl overflow-hidden border border-slate-200 p-4 sm:p-5 space-y-3';
+        card.className = 'bg-white rounded-[28px] overflow-hidden border-2 border-pink-100 shadow-sm p-4 sm:p-5 space-y-3';
         card.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-md bg-orange-500 text-white text-[10px] font-black">Spot ${spot.order}</span>
-            <h4 class="font-black text-base sm:text-lg">${spot.name}</h4>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-rose-400 to-pink-500 text-white text-[10px] font-black">Spot ${spot.order}</span>
+              <h4 class="font-black text-base sm:text-lg text-slate-800">${spot.name}</h4>
+            </div>
+            ${spot.distanceKm !== undefined ? `
+              <span class="px-2.5 py-1 rounded-full text-xs font-black bg-rose-50 text-rose-600 border border-rose-200">
+                📍 現在地から ${formatDist(spot.distanceKm)}
+              </span>
+            ` : ''}
           </div>
-          <p class="text-xs text-slate-600">${spot.description}</p>
-          <div class="p-3 rounded-2xl bg-purple-50 border border-purple-200 text-purple-900 text-xs">
-            <strong>📸 おすすめ撮影スポット：</strong>${spot.photoTip}
+          <p class="text-xs text-slate-600 font-medium leading-relaxed">${spot.description}</p>
+          <div class="p-3 rounded-2xl bg-[#FCF8FF] border border-purple-100 text-purple-900 text-xs">
+            <strong class="font-black text-purple-800 block mb-0.5">📸 おすすめ撮影スポット＆アングル：</strong>${spot.photoTip}
           </div>
-          <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-slate-700 text-xs">
-            <strong>🛺 トゥクトゥク移動ポイント：</strong>${spot.tukTukTip}
+          <div class="p-3 rounded-2xl bg-[#FFF6F3] border border-pink-100 text-slate-700 text-xs flex items-start gap-2">
+            <span class="text-base shrink-0">✨</span>
+            <div>
+              <strong class="font-black text-rose-500 block mb-0.5">日南エモ旅おすすめPoint：</strong>
+              <span class="text-slate-600 font-medium">${spot.jrTip}</span>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-pink-50 flex items-center justify-between">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(spot.mapQuery || (spot.name + ' 日南市'))}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-full text-xs font-black bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 shadow-2xs flex items-center gap-1.5">
+              <span>🧭 そこに行く！</span>
+              ${spot.distanceKm !== undefined ? `<span class="text-[10px] font-bold text-amber-700 bg-amber-200/70 px-1.5 py-0.5 rounded-full">${formatDist(spot.distanceKm)}</span>` : ''}
+            </a>
+            <button onclick="openStampModal('${spot.id}')" class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs font-black shadow-xs flex items-center gap-1">
+              <span>${spot.stampIcon}</span>
+              <span>${spot.stampShort} スタンプGET</span>
+            </button>
           </div>
         `;
         container.appendChild(card);
@@ -604,12 +1110,12 @@
       document.getElementById('tab-ticket').classList.add('hidden');
       document.getElementById('tab-guide').classList.add('hidden');
 
-      document.getElementById('nav-btn-home').className = 'flex flex-col items-center justify-center w-24 text-slate-400';
-      document.getElementById('nav-btn-ticket').className = 'flex flex-col items-center justify-center w-24 text-slate-400 relative';
-      document.getElementById('nav-btn-guide').className = 'flex flex-col items-center justify-center w-24 text-slate-400';
+      document.getElementById('nav-btn-home').className = 'flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-slate-400 font-bold';
+      document.getElementById('nav-btn-ticket').className = 'flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-slate-400 font-bold relative';
+      document.getElementById('nav-btn-guide').className = 'flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-slate-400 font-bold';
 
       document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-      document.getElementById(`nav-btn-${tabId}`).className = 'flex flex-col items-center justify-center w-24 text-orange-600 font-extrabold relative';
+      document.getElementById(`nav-btn-${tabId}`).className = 'flex flex-col items-center justify-center w-24 h-13 rounded-2xl text-rose-500 font-black bg-pink-50/80 shadow-2xs relative';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -621,12 +1127,15 @@
 
       document.getElementById('modal-spot-title').innerText = spot.name;
       document.getElementById('modal-spot-subtitle').innerText = spot.subtitle;
+      document.getElementById('modal-spot-icon').innerText = spot.stampIcon || '⭐';
+      document.getElementById('modal-submit-icon').innerText = spot.stampIcon || '✨';
+      document.getElementById('modal-submit-text').innerText = `${spot.stampShort} スタンプを捺す♡`;
 
       const tagContainer = document.getElementById('modal-hashtags-container');
       tagContainer.innerHTML = '';
       spot.hashtags.forEach(tag => {
         const span = document.createElement('span');
-        span.className = 'text-[11px] font-medium px-2 py-0.5 rounded-md bg-white text-orange-700 border border-orange-200';
+        span.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full bg-white text-rose-400 border border-pink-200/80';
         span.innerText = tag;
         tagContainer.appendChild(span);
       });
@@ -645,11 +1154,11 @@
       if (!activeModalSpot) return;
       navigator.clipboard.writeText(activeModalSpot.hashtags.join(' '));
       const btn = document.getElementById('modal-copy-btn');
-      btn.innerText = 'コピー完了！';
-      btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white';
+      btn.innerText = 'コピー完了♡';
+      btn.className = 'px-3 py-1 rounded-full text-xs font-black bg-rose-400 text-white';
       setTimeout(() => {
-        btn.innerText = 'タグをコピー';
-        btn.className = 'px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white hover:bg-orange-600';
+        btn.innerText = '全タグをコピー';
+        btn.className = 'px-3 py-1 rounded-full text-xs font-black bg-rose-400 text-white hover:bg-rose-500';
       }, 2000);
     }
 
@@ -704,14 +1213,23 @@
       }
     }
 
+    function quickDemoAddStamp() {
+      const unstamped = SPOTS.find(s => !userStamps.some(st => st.spotId === s.id));
+      if (unstamped) {
+        activeModalSpot = unstamped;
+        currentPreviewUrl = unstamped.imageUrl;
+        submitStamp();
+      }
+    }
+
     function closeCelebrationAndGoTicket() {
       document.getElementById('celebration-modal').classList.add('hidden');
       switchTab('ticket');
     }
 
-    // Driver Modal Operations
+    // Cashier Verification Modal Operations
     function openDriverModal() {
-      document.getElementById('driver-ticket-code').innerText = userTicket.code || 'NTT-2026-X8K9';
+      document.getElementById('driver-ticket-code').innerText = userTicket.code || 'NIC-1000-2026-X8K9';
       document.getElementById('driver-modal').classList.remove('hidden');
     }
 
@@ -720,13 +1238,13 @@
     }
 
     function markTicketUsed() {
-      if (confirm('ドライバーの前で提示しましたか？使用済みに変更します。')) {
+      if (confirm('店員さんにお見せしてお会計の値引き確認はできましたか？使用済みに変更します。')) {
         userTicket.isUsed = true;
         userTicket.usedAt = new Date().toISOString();
         saveState();
         renderApp();
         closeDriverModal();
-        alert('チケットを使用済みにしました。日南トゥクトゥクのご利用ありがとうございました！');
+        alert('お会計で1,000円分商品券のご利用が完了しました。日南のお店をご利用いただきありがとうございました！🛍️✨');
       }
     }
 
@@ -741,11 +1259,12 @@
     }
 
     function resetData() {
-      if (confirm('スタンプとチケット利用状況をリセットしますか？')) {
+      if (confirm('スタンプと商品券をリセットして初めに戻りますか？')) {
         userStamps = [];
-        userTicket = { isUnlocked: false, isUsed: false, usedAt: null, code: 'NTT-2026-X8K9' };
+        userTicket = { isUnlocked: false, isUsed: false, usedAt: null, code: 'NIC-1000-2026-' + Math.random().toString(36).substring(2, 6).toUpperCase() };
         saveState();
         renderApp();
+        switchTab('home');
       }
     }
 

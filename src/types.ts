@@ -1,15 +1,38 @@
+export type SupportedLang = 'ja' | 'en' | 'zh' | 'ko';
+
+export interface LanguageOption {
+  code: SupportedLang;
+  label: string;
+  nativeLabel: string;
+  flag: string;
+}
+
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export interface Spot {
   id: string;
   name: string;
   subtitle: string;
   category: string;
   description: string;
-  tukTukTip: string;
+  jrTip: string;
+  recommendPoint?: string;
   photoTip: string;
   hashtags: string[];
   imageUrl: string;
   accentColor: string;
   recommendedOrder: number;
+  mapQuery?: string;
+  stampIcon: string;
+  stampName: string;
+  stampShort: string;
+  stampColor?: string;
+  lat: number;
+  lng: number;
+  distanceKm?: number;
 }
 
 export interface StampRecord {
@@ -25,6 +48,8 @@ export interface TicketData {
   usedAt: string | null;
   ticketCode: string;
   issuedAt: string;
+  rewardTitle?: string;
+  amount?: number;
 }
 
 export type TabType = 'home' | 'ticket' | 'guide';
